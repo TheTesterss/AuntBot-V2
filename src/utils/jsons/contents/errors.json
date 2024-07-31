@@ -1,0 +1,114 @@
+{
+    "descriptions": {
+        "permissions": {
+            "en": "You don't have correct permissions to manage this.",
+            "fr": "Vous n'avez pas les permissions correctes pour gérer ceci."
+        },
+        "bot_perms": {
+            "en": "I don't have correct permissions to manage this.",
+            "fr": "Je n'ai pas les permissions correctes pour gérer ceci."
+        },
+        "fetching": {
+            "en": "I'm currently fecthing datas...",
+            "fr": "Je suis actuellement à la recherche de données..."
+        },
+        "executing": {
+            "en": "I'm currently executing massive functions...",
+            "fr": "Je suis actuellement en train d'exécuter de lourdes fonctions..."
+        },
+        "not_found": {
+            "en": "Wait! This shouldn't come. Command seems not found!",
+            "fr": "Attendez ! ça ne devait pas arriver. Cette commande semble inexistante !"
+        },
+        "voice": {
+            "en": "It seems like this commande require to be in a voice channel.",
+            "fr": "Cette commande semble demander que vous soyez en vocal."
+        },
+        "developer": {
+            "en": "Pop! You're not my developer???",
+            "fr": "Pop ! Vous n'êtes pas mon développeur ???"
+        },
+        "owner": {
+            "en": "You're not managing this server :/.",
+            "fr": "Vous ne gérez pas ce serveur :/."
+        },
+        "admin": {
+            "en": "You don't have correct permissions to manage this.",
+            "fr": "Vous n'avez pas les permissions correctes pour gérer ceci."
+        },
+        "unvailable": {
+            "en": "This command can't be run as it is currently disabled :/",
+            "fr": "Cette commande ne peut être exécuté, elle est désactivé :/"
+        },
+        "news": {
+            "en": "Can you please wait next update to use it???",
+            "fr": "Pouvez vous s'il vous plaît attendre la prochaine mise à jour ???"
+        },
+        "cooldown": {
+            "en": "You're currently on cooldown mode.",
+            "fr": "Je n'ai pas les permissions correctes pour gérer ceci."
+        },
+        "blacklisted": {
+            "en": "You've been blacklisted from the client.",
+            "fr": "Vous avez été mis sur liste noire du client."
+        },
+        "internal": {
+            "en": "An internal program error came! Can't let you get more informations :/",
+            "fr": "Une erreur interne du programme est arrivée ! Je ne peux vous laissez obtenir plus d'informations :/"
+        },
+        "adding": {
+            "en": "This user can't be added into the list.",
+            "fr": "Cet utilisateur ne peut être ajouté à la liste."
+        },
+        "removing": {
+            "en": "This user can't be removed into the list.",
+            "fr": "Cet utilisateur ne peut être retiré de la liste."
+        },
+        "interaction": {
+            "en": "This is not your interaction.",
+            "fr": "Ceci n'est pas votre intéraction."
+        }
+    },
+    "footers": {
+        "301": {
+            "en": "301 - Redirecting...",
+            "fr": "301 - Redirection..."
+        },
+        "302": {
+            "en": "302 - Fetching few datas...",
+            "fr": "302 - Importation de données..."
+        },
+        "401": {
+            "en": "401 - Missing authorizations.",
+            "fr": "401 - Manque d'autorisations."
+        },
+        "402": {
+            "en": "402 - Missing access.",
+            "fr": "402 - Manque d'accès."
+        },
+        "403": {
+            "en": "403 - Missing permissions.",
+            "fr": "403 - Manque de permissions."
+        },
+        "404": {
+            "en": "404 - Unvailable command.",
+            "fr": "404 - Commande non valide."
+        },
+        "429": {
+            "en": "429 - Too many requests.",
+            "fr": "429 - Trop de requêtes."
+        },
+        "500": {
+            "en": "500 - Internal program error.",
+            "fr": "500 - Erreur interne du programme."
+        },
+        "501": {
+            "en": "501 - Not implemented.",
+            "fr": "501 - Non implémenté."
+        },
+        "503": {
+            "en": "503 - Command couldn't be ran.",
+            "fr": "503 - La commande ne peut pas être lancé."
+        }
+    }
+}
