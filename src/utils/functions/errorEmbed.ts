@@ -8,7 +8,8 @@ import {
     AnySelectMenuInteraction
 } from 'discord.js';
 import Bot from '../../classes/Bot';
-import { errorEmbedType, LangType } from '../../enums/Types';
+import { LangType } from '../../enums/Types';
+import { LangValues } from '../../enums/enums';
 
 export const errorEmbed = async (
     main: Bot,
@@ -22,13 +23,34 @@ export const errorEmbed = async (
     text: 'adding' | 'removing' | 'interaction'
 ) => {
     let embed = new EmbedBuilder()
-        .setDescription(main.error_embed.descriptions[text][lang])
         .setColor(main.colors.false as ColorResolvable)
         .setFooter({
-            text: main.error_embed.footers[403][lang],
+            text: lang === LangValues.EN ? 'Powered by Aunt Development' : 'Alimenté par Aunt Développement',
             iconURL: interaction.client.user.avatarURL() ?? undefined
         })
         .setTimestamp();
+
+    switch (text) {
+        case 'adding':
+            embed.setDescription(
+                lang === LangValues.EN
+                    ? "This user can't be added into the list."
+                    : 'Cette utilisateur ne peut être ajouté dans la liste.'
+            );
+            break;
+        case 'removing':
+            embed.setDescription(
+                lang === LangValues.EN
+                    ? "This user can't be removed into the list."
+                    : 'Cette utilisateur ne peut être retiré dans la liste.'
+            );
+            break;
+        case 'interaction':
+            embed.setDescription(
+                lang === LangValues.EN ? 'This interaction is not yours.' : "Cette intéraction n'est pas la tienne."
+            );
+            break;
+    }
 
     await interaction.reply({ embeds: [embed], ephemeral: true });
 };

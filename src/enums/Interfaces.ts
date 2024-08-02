@@ -58,7 +58,10 @@ export interface CommandDatas {
     execute: (
         bot: Bot,
         database: Database,
-        interaction: ChatInputCommandInteraction | UserContextMenuCommandInteraction | MessageContextMenuCommandInteraction,
+        interaction:
+            | ChatInputCommandInteraction
+            | UserContextMenuCommandInteraction
+            | MessageContextMenuCommandInteraction,
         command: CommandDatas,
         lang: LangValues
     ) => {};

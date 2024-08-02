@@ -38,14 +38,12 @@ import fs from 'node:fs';
 import { REST } from '@discordjs/rest';
 import path from 'path';
 
-import error_embed from '../utils/jsons/contents/errors.json';
-import embed from '../utils/jsons/contents/commands.json';
 import emojis from '../utils/jsons/emojis.json';
 import colors from '../utils/jsons/colors.json';
-import { customColorsType, customEmojisType, embedType, errorEmbedType } from '../enums/Types';
+import { customColorsType, customEmojisType } from '../enums/Types';
 import { ClientCustomEvents, CommandDatas, CommandDatasOption, EventDatas, MongooseEvents } from '../enums/Interfaces';
 import Database from './Database';
-import { EventType } from '../enums/enums';
+import { EventType, LangValues } from '../enums/enums';
 import EventEmitter from 'node:events';
 
 export default class Bot extends EventEmitter {
@@ -55,8 +53,6 @@ export default class Bot extends EventEmitter {
     public colors: customColorsType = colors;
     public commands: Collection<string, CommandDatas> = new Collection();
     public eventTypes: { 1: string; 2: string; 3: string };
-    public error_embed: errorEmbedType = error_embed;
-    public embed: embedType = embed;
     constructor() {
         super({ captureRejections: true });
         this.djsClient = new Client({
@@ -165,15 +161,15 @@ export default class Bot extends EventEmitter {
         }
     }
 
-    public async fetchCommands(): Promise<CommandDatas[]> {
+    public async fetchCommands(lang: LangValues): Promise<CommandDatas[]> {
         const followedModels: CommandDatas[] = [];
-        let folders: string[] = fs.readdirSync(path.join(path.resolve(__dirname, '..'), 'commands'));
+        let folders: string[] = fs.readdirSync(path.join(path.resolve(__dirname, '..'), 'commands', lang));
 
         for (const subFolder of folders) {
-            let files: string[] = fs.readdirSync(path.join(path.resolve(__dirname, '..'), 'commands', subFolder));
+            let files: string[] = fs.readdirSync(path.join(path.resolve(__dirname, '..'), 'commands', lang, subFolder));
 
             for (const file of files) {
-                let filePath: string = `../commands/${subFolder}/${file}`;
+                let filePath: string = `../commands/${lang}/${subFolder}/${file}`;
                 const model: CommandDatas = require(filePath).command;
 
                 if (this.isValidCommandModel(model, file)) followedModels.push(model);
@@ -205,61 +201,85 @@ export default class Bot extends EventEmitter {
         let result: any;
         switch (opt.type) {
             case ApplicationCommandOptionType.Attachment:
-                (slash as SlashCommandBuilder | SlashCommandSubcommandBuilder).addAttachmentOption((option: SlashCommandAttachmentOption): SlashCommandAttachmentOption => {
-                    setCommonProperties(option, opt);
-                    return (result = option);
-                });
+                (slash as SlashCommandBuilder | SlashCommandSubcommandBuilder).addAttachmentOption(
+                    (option: SlashCommandAttachmentOption): SlashCommandAttachmentOption => {
+                        setCommonProperties(option, opt);
+                        option.setRequired(opt.required ?? false)
+                        return (result = option);
+                    }
+                );
                 break;
             case ApplicationCommandOptionType.Boolean:
-                (slash as SlashCommandBuilder | SlashCommandSubcommandBuilder).addBooleanOption((option: SlashCommandBooleanOption): SlashCommandBooleanOption => {
-                    setCommonProperties(option, opt);
-                    return (result = option);
-                });
+                (slash as SlashCommandBuilder | SlashCommandSubcommandBuilder).addBooleanOption(
+                    (option: SlashCommandBooleanOption): SlashCommandBooleanOption => {
+                        setCommonProperties(option, opt);
+                        option.setRequired(opt.required ?? false)
+                        return (result = option);
+                    }
+                );
                 break;
             case ApplicationCommandOptionType.Channel:
-                (slash as SlashCommandBuilder | SlashCommandSubcommandBuilder).addChannelOption((option: SlashCommandChannelOption): SlashCommandChannelOption => {
-                    setCommonProperties(option, opt);
-                    if (opt.channelTypes) option.addChannelTypes(opt.channelTypes);
-                    return (result = option);
-                });
+                (slash as SlashCommandBuilder | SlashCommandSubcommandBuilder).addChannelOption(
+                    (option: SlashCommandChannelOption): SlashCommandChannelOption => {
+                        setCommonProperties(option, opt);
+                        if (opt.channelTypes) option.addChannelTypes(opt.channelTypes);
+                        option.setRequired(opt.required ?? false)
+                        return (result = option);
+                    }
+                );
                 break;
             case ApplicationCommandOptionType.Integer:
-                (slash as SlashCommandBuilder | SlashCommandSubcommandBuilder).addIntegerOption((option: SlashCommandIntegerOption): SlashCommandIntegerOption => {
-                    setCommonProperties(option, opt);
-                    if (opt.maxValue) option.setMaxValue(opt.maxValue);
-                    if (opt.minValue) option.setMinValue(opt.minValue);
-                    return (result = option);
-                });
+                (slash as SlashCommandBuilder | SlashCommandSubcommandBuilder).addIntegerOption(
+                    (option: SlashCommandIntegerOption): SlashCommandIntegerOption => {
+                        setCommonProperties(option, opt);
+                        if (opt.maxValue) option.setMaxValue(opt.maxValue);
+                        if (opt.minValue) option.setMinValue(opt.minValue);
+                        option.setRequired(opt.required ?? false)
+                        return (result = option);
+                    }
+                );
                 break;
             case ApplicationCommandOptionType.Mentionable:
-                (slash as SlashCommandBuilder | SlashCommandSubcommandBuilder).addMentionableOption((option: SlashCommandMentionableOption): SlashCommandMentionableOption => {
-                    setCommonProperties(option, opt);
-                    return (result = option);
-                });
+                (slash as SlashCommandBuilder | SlashCommandSubcommandBuilder).addMentionableOption(
+                    (option: SlashCommandMentionableOption): SlashCommandMentionableOption => {
+                        setCommonProperties(option, opt);
+                        option.setRequired(opt.required ?? false)
+                        return (result = option);
+                    }
+                );
                 break;
             case ApplicationCommandOptionType.Number:
-                (slash as SlashCommandBuilder | SlashCommandSubcommandBuilder).addNumberOption((option: SlashCommandNumberOption): SlashCommandNumberOption => {
-                    setCommonProperties(option, opt);
-                    if (opt.maxValue) option.setMaxValue(opt.maxValue);
-                    if (opt.minValue) option.setMinValue(opt.minValue);
-                    return (result = option);
-                });
+                (slash as SlashCommandBuilder | SlashCommandSubcommandBuilder).addNumberOption(
+                    (option: SlashCommandNumberOption): SlashCommandNumberOption => {
+                        setCommonProperties(option, opt);
+                        if (opt.maxValue) option.setMaxValue(opt.maxValue);
+                        if (opt.minValue) option.setMinValue(opt.minValue);
+                        option.setRequired(opt.required ?? false)
+                        return (result = option);
+                    }
+                );
                 break;
             case ApplicationCommandOptionType.Role:
-                (slash as SlashCommandBuilder | SlashCommandSubcommandBuilder).addRoleOption((option: SlashCommandRoleOption): SlashCommandRoleOption => {
-                    setCommonProperties(option, opt);
-                    return (result = option);
-                });
+                (slash as SlashCommandBuilder | SlashCommandSubcommandBuilder).addRoleOption(
+                    (option: SlashCommandRoleOption): SlashCommandRoleOption => {
+                        setCommonProperties(option, opt);
+                        option.setRequired(opt.required ?? false)
+                        return (result = option);
+                    }
+                );
                 break;
             case ApplicationCommandOptionType.String:
-                (slash as SlashCommandBuilder | SlashCommandSubcommandBuilder).addStringOption((option: SlashCommandStringOption): SlashCommandStringOption => {
-                    setCommonProperties(option, opt);
-                    if (opt.autocomplete) option.setAutocomplete(true);
-                    if (opt.choices && opt.choices.length > 0) option.addChoices(opt.choices);
-                    if (opt.maxLength) option.setMaxLength(opt.maxLength);
-                    if (opt.minLength) option.setMinLength(opt.minLength);
-                    return (result = option);
-                });
+                (slash as SlashCommandBuilder | SlashCommandSubcommandBuilder).addStringOption(
+                    (option: SlashCommandStringOption): SlashCommandStringOption => {
+                        setCommonProperties(option, opt);
+                        if (opt.autocomplete) option.setAutocomplete(true);
+                        if (opt.choices && opt.choices.length > 0) option.addChoices(opt.choices);
+                        if (opt.maxLength) option.setMaxLength(opt.maxLength);
+                        option.setRequired(opt.required ?? false)
+                        if (opt.minLength) option.setMinLength(opt.minLength);
+                        return (result = option);
+                    }
+                );
                 break;
             case ApplicationCommandOptionType.Subcommand:
                 (slash as SlashCommandBuilder).addSubcommand(
@@ -280,10 +300,13 @@ export default class Bot extends EventEmitter {
                 );
                 break;
             case ApplicationCommandOptionType.User:
-                (slash as SlashCommandBuilder | SlashCommandSubcommandBuilder).addUserOption((option: SlashCommandUserOption): SlashCommandUserOption => {
-                    setCommonProperties(option, opt);
-                    return (result = option);
-                });
+                (slash as SlashCommandBuilder | SlashCommandSubcommandBuilder).addUserOption(
+                    (option: SlashCommandUserOption): SlashCommandUserOption => {
+                        setCommonProperties(option, opt);
+                        option.setRequired(opt.required ?? false)
+                        return (result = option);
+                    }
+                );
                 break;
         }
 
@@ -291,7 +314,7 @@ export default class Bot extends EventEmitter {
     }
 
     public async createCommands(): Promise<void> {
-        let followedModels: CommandDatas[] = await this.fetchCommands();
+        let followedModels: CommandDatas[] = await this.fetchCommands(LangValues.EN);
         let commands: any[] = [];
         for (const model of followedModels) {
             for (const type of model.types)
@@ -343,12 +366,15 @@ export default class Bot extends EventEmitter {
 
     public waitForCommandExecution(): void {
         this.djsClient!.on(Events.InteractionCreate, async (interaction) => {
+            const lang: string | undefined = (
+                await this.database?.models.GuildDB.findOne({ id: interaction.guild!.id })
+            )?.lang;
             if (interaction.isChatInputCommand()) {
                 if (!interaction.deferred) await interaction.deferReply();
                 this.emit(
                     'slashCommandExecution',
                     interaction as CommandInteraction,
-                    (await this.fetchCommands()).find((cmd) => cmd.name === interaction.commandName)
+                    (await this.fetchCommands(lang as LangValues)).find((cmd) => cmd.name === interaction.commandName)
                 );
             }
             if (interaction.isUserContextMenuCommand()) {
@@ -356,7 +382,7 @@ export default class Bot extends EventEmitter {
                 this.emit(
                     'userContextCommandExecution',
                     interaction as UserContextMenuCommandInteraction,
-                    (await this.fetchCommands()).find((cmd) => cmd.name === interaction.commandName)
+                    (await this.fetchCommands(lang as LangValues)).find((cmd) => cmd.name === interaction.commandName)
                 );
             }
             if (interaction.isMessageContextMenuCommand()) {
@@ -364,7 +390,7 @@ export default class Bot extends EventEmitter {
                 this.emit(
                     'messageContextCommandExecution',
                     interaction as MessageContextMenuCommandInteraction,
-                    (await this.fetchCommands()).find((cmd) => cmd.name === interaction.commandName)
+                    (await this.fetchCommands(lang as LangValues)).find((cmd) => cmd.name === interaction.commandName)
                 );
             }
             if (interaction.isButton()) this.emit('buttonExecution', interaction as ButtonInteraction);

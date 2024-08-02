@@ -23,7 +23,7 @@ export = {
         switch (interaction.values[0]) {
             case 'discord':
                 embed.setDescription(
-                    '```php\n01. Les termes sont tous respectés.\n02. les licenses de Discord sont toutes respectées.\n03. On ne partage aucune donnée du serveur.\n04. Le partage d\'identité telque: le votre, celui concernant quelqu\'un présent ou non ici, une fausse identité semblable à une vraie est interdite.```'
+                    '```php\n01. Terms are ALL respected.\n02. Discord licenses are ALL respected.\n03. We do NOT share any datas we get on this server.\n04. Leak of any identities (fakes, your own one, from someone) is NOT ALLOWED.```'
                 );
                 embed.setFooter({
                     iconURL: main.djsClient!.user?.avatarURL() ?? undefined,
@@ -45,32 +45,32 @@ export = {
                 break;
             case 'account':
                 embed.setDescription(
-                    '```php\n01. Votre compte se doit de ne pas être partagé.\n02. Tout acte fait avec votre compte sans preuves valables comme quoi ce n\'est pas votre faute seront prit en compte.\n03. Le partage d\'informations telsque: un token utilsateur et/ou de bot sont interdits.\n04. Votre pseudonyme, votre bannière, votre icone doivent correspondre aux personnes de 18 ans et moins.\n05. L\'utilisation de caractères spéciaux dans votre pseudonyme conduira à une modification de celui-ci.\n06. Les doubles comptes sont bannis, peut inclure votre compte principal.\n07. Les comptes de moins de 10 jours seront exclus tant qu\'il ne passe pas les 10 jours.```'
+                    '```php\n01. Your account has to not be shared.\n02. Any acts made by your account with no proof of hacking result in your entire fault.\n03. Sharing informations such as: bot token, app url in supports channels can be VERY dangerous.\n04. Your banner, your avatar have to be respectful and allowed to be seen by 18- users.\n05. Using specials chars in your name result with a rename.\n06. Doubles accounts are banned, can includes your main account.\n07.Accounts with less than 10 days are kicked while they do not pass the 10 days limit.```'
                 );
                 break;
             case 'together':
                 embed.setDescription(
-                    '```php\n01. Vous devez respecter les sexes, les religions, les origines, les personnes...\n02. Vous devez parler de sujets classiques.\n03. Vous devez être compris, c\'est pourquoi l\'anglais et le français sont les deux seules langues reconnues.\n04. Vous devez respecter le thème des salons.\n05. Le contenu destiné aux personnes de 18 ans et plus est banni.\n05. Vous n\'avez pas à contester les décisions du personnel en publique. Si vous pensez que c\'est une erreur, demander en tickets.```'
+                    '```php\n01. You have to be respectful with MEN & WOMEN, Christians & Muslims & Jews...\n02. You have to chat about corrects topics.\n03. You have to be understood, so speak french or english only.\n04. You have to respect channel theme.\n05. +18 content result in a direct ban.\n05. You DO NOT HAVE to contest the staff decisions. Ask admins for any problems in dms.```'
                 );
                 break;
             case 'contents':
                 embed.setDescription(
-                    '```php\n01. Le spam est interdit, Pour blaguer ou non.\n02. Les critiques sont toutes les bienvenues si elles sont données de manière respectueuse et permettes d\'améliorer le projet.\n03. Les invitations et liens en tout genre sont interdits, ceux à propos de serveur "reward", "NSFW"... sont bannis.```'
+                    '```php\n01. Spamming in a channel is not allowed, to troll or not.\n02. Critics are welcome when they are here to help to build a better community and with a respectful & correct language.\n03. Sending invite is NOT allowed, 18+ servers, rewards servers... published result on a direct ban.```'
                 );
                 break;
             case 'mentions':
                 embed.setDescription(
-                    '```php\n01. Si par erreur un rôle est mentionnable, prévenez le staff en privé seulement.\n02. Mentionner les administrateurs est valables si la question est logique et/ou que vous les connaissez.\n03. Aucunes mentions de personnels n\'est autorisé sans raisons valides.```'
+                    '```php\n01. If a role is mentionable by internal error, directly ask in founders dms.\n02. Founders mentions are allowed for logical questions or if you know them.\n03. Do NOT mention the staff for bad reasons.```'
                 );
                 break;
             case 'voice':
                 embed.setDescription(
-                    '```php\n01. Les insultes sont interdites.\n02. Le salon afk doit être respecté, à utiliser quand vous ne voulez rien entendre.\n03. Enregistrer dans un salon vocal est formellement interdit et peut aller jusqu\'au bannissement de discord.\n04. Diffuser du contenu contraire aux lois françaises et/ou aux termes de Discord est interdit.```'
+                    '```php\n01. Insulting users is not allowed.\n02. AFK channel musts be respected, use it when you are in deafen mode.\n03. Recording voice channels is NOT ALLOWED.\n04. Sharing by a stream sensible things is NOT ALLOWED .```'
                 );
                 break;
             case 'exhaustiveness':
                 embed.setDescription(
-                    '```php\n01. Notre personnel à le dernier mot.\n02. Si un membre du personnel abuse de ses permissions, veuillez ouvrir un ticket.```'
+                    '```php\n01. Our staff have the last word. They warn you for any reasons that they judge against our rules.\n02. If a staff abused of his permissions, he will be banned and you will be unbanned. Come in admin dms.```'
                 );
                 break;
             case 'terms':

@@ -28,14 +28,18 @@ export = {
         const embed = new EmbedBuilder().setColor(main.colors.true as ColorResolvable);
         let problem = false;
 
-        if (lang || ![LangValues.EN, LangValues.FR].includes(lang as LangValues)) {
+        if (!lang || ![LangValues.EN, LangValues.FR].includes(lang as LangValues)) {
             if (command.customOptions.forBotOwnerOnly && process.env.owner !== interaction.user.id) {
                 problem = true;
                 embed.setFooter({
                     iconURL: main.djsClient!.user?.avatarURL() ?? undefined,
-                    text: main.error_embed.footers['401'][lang as LangValues]
+                    text: lang === LangValues.EN ? 'Powered by Aunt Development' : 'Alimenté par Aunt Développement'
                 });
-                embed.setDescription(main.error_embed.descriptions.developer[lang as LangValues]);
+                embed.setDescription(
+                    lang === LangValues.EN
+                        ? 'This command is reserved to my developers!'
+                        : 'Cette commande est réservée à mes développeurs !'
+                );
             }
 
             if (
@@ -45,18 +49,26 @@ export = {
                 problem = true;
                 embed.setFooter({
                     iconURL: main.djsClient!.user?.avatarURL() ?? undefined,
-                    text: main.error_embed.footers['403'][lang as LangValues]
+                    text: lang === LangValues.EN ? 'Powered by Aunt Development' : 'Alimenté par Aunt Développement'
                 });
-                embed.setDescription(main.error_embed.descriptions.admin[lang as LangValues]);
+                embed.setDescription(
+                    lang === LangValues.EN
+                        ? 'This command is reserved for server admins!'
+                        : 'Cette commande est réservée aux administrateurs !'
+                );
             }
 
             if (command.customOptions.forGuildOwnerOnly && interaction.guild?.ownerId !== interaction.user.id) {
                 problem = true;
                 embed.setFooter({
                     iconURL: main.djsClient!.user?.avatarURL() ?? undefined,
-                    text: main.error_embed.footers['403'][lang as LangValues]
+                    text: lang === LangValues.EN ? 'Powered by Aunt Development' : 'Alimenté par Aunt Développement'
                 });
-                embed.setDescription(main.error_embed.descriptions.owner[lang as LangValues]);
+                embed.setDescription(
+                    lang === LangValues.EN
+                        ? 'This command is reserved to this owner'
+                        : 'Cette commande est réservée à ce propriétaire !'
+                );
             }
 
             if (
@@ -66,9 +78,13 @@ export = {
                 problem = true;
                 embed.setFooter({
                     iconURL: main.djsClient!.user?.avatarURL() ?? undefined,
-                    text: main.error_embed.footers['402'][lang as LangValues]
+                    text: lang === LangValues.EN ? 'Powered by Aunt Development' : 'Alimenté par Aunt Développement'
                 });
-                embed.setDescription(main.error_embed.descriptions.voice[lang as LangValues]);
+                embed.setDescription(
+                    lang === LangValues.EN
+                        ? 'You have to be in a voice channel to execute that.'
+                        : 'Tu dois être en vocal pour exécuter ça.'
+                );
             }
 
             let user_data = await database.models.UserDB.findOne({ id: interaction.user.id });
@@ -83,9 +99,11 @@ export = {
                 problem = true;
                 embed.setFooter({
                     iconURL: main.djsClient!.user?.avatarURL() ?? undefined,
-                    text: main.error_embed.footers['503'][lang as LangValues]
+                    text: lang === LangValues.EN ? 'Powered by Aunt Development' : 'Alimenté par Aunt Développement'
                 });
-                embed.setDescription(main.error_embed.descriptions.blacklisted[lang as LangValues]);
+                embed.setDescription(
+                    lang === LangValues.EN ? 'You are currently blacklisted.' : 'Tu fais partis de la liste noire.'
+                );
             }
         }
 
