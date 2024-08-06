@@ -16,6 +16,9 @@ import {
     MessageContextMenuCommandInteraction,
     ModalSubmitInteraction,
     Partials,
+    PermissionFlags,
+    PermissionFlagsBits,
+    PermissionsBitField,
     RoleSelectMenuInteraction,
     Routes,
     SlashCommandAttachmentOption,
@@ -33,18 +36,18 @@ import {
     StringSelectMenuInteraction,
     UserContextMenuCommandInteraction,
     UserSelectMenuInteraction
-} from 'discord.js';
-import fs from 'node:fs';
-import { REST } from '@discordjs/rest';
-import path from 'path';
+} from "discord.js";
+import fs from "node:fs";
+import { REST } from "@discordjs/rest";
+import path from "path";
 
-import emojis from '../utils/jsons/emojis.json';
-import colors from '../utils/jsons/colors.json';
-import { customColorsType, customEmojisType } from '../enums/Types';
-import { ClientCustomEvents, CommandDatas, CommandDatasOption, EventDatas, MongooseEvents } from '../enums/Interfaces';
-import Database from './Database';
-import { EventType, LangValues } from '../enums/enums';
-import EventEmitter from 'node:events';
+import emojis from "../utils/jsons/emojis.json";
+import colors from "../utils/jsons/colors.json";
+import { customColorsType, customEmojisType } from "../enums/Types";
+import { ClientCustomEvents, CommandDatas, CommandDatasOption, EventDatas, MongooseEvents } from "../enums/Interfaces";
+import Database from "./Database";
+import { EventType, LangValues } from "../enums/enums";
+import EventEmitter from "node:events";
 
 export default class Bot extends EventEmitter {
     public djsClient: Client | undefined;
@@ -92,19 +95,19 @@ export default class Bot extends EventEmitter {
         this.database.startDatabase(process.env.mongo_uri);
 
         this.eventTypes = {
-            1: 'Discord.js event',
-            2: 'Program event',
-            3: 'Database event'
+            1: "Discord.js event",
+            2: "Program event",
+            3: "Database event"
         };
     }
 
     async fetchEvents(): Promise<EventDatas[]> {
         const followedModels: EventDatas[] = [];
-        let folders: string[] = fs.readdirSync(path.join(path.resolve(__dirname, '..'), 'events'));
+        let folders: string[] = fs.readdirSync(path.join(path.resolve(__dirname, ".."), "events"));
 
         for (const subFolder of folders) {
-            if (fs.lstatSync(path.join(path.resolve(__dirname, '..'), 'events', subFolder)).isDirectory()) {
-                let files: string[] = fs.readdirSync(path.join(path.resolve(__dirname, '..'), 'events', subFolder));
+            if (fs.lstatSync(path.join(path.resolve(__dirname, ".."), "events", subFolder)).isDirectory()) {
+                let files: string[] = fs.readdirSync(path.join(path.resolve(__dirname, ".."), "events", subFolder));
 
                 for (const file of files) {
                     let filePath: string = `../events/${subFolder}/${file}`;
@@ -114,7 +117,7 @@ export default class Bot extends EventEmitter {
                 }
             }
 
-            if (subFolder.endsWith('.js')) {
+            if (subFolder.endsWith(".js")) {
                 let filePath: string = `../events/${subFolder}`;
                 let model: EventDatas = require(filePath);
 
@@ -128,7 +131,7 @@ export default class Bot extends EventEmitter {
     public isValidEventModel(model: EventDatas, file: string): boolean {
         if (!model || !model.name) throw new Error(`[${file.toLocaleUpperCase()}] - Arguments aren't all completed.`);
 
-        if (typeof model.name !== 'string' || (model.once && ![true, false].includes(model.once)))
+        if (typeof model.name !== "string" || (model.once && ![true, false].includes(model.once)))
             throw new TypeError(`[${file.toLocaleUpperCase()}] - Arguments types aren't correct.`);
 
         return true;
@@ -139,17 +142,17 @@ export default class Bot extends EventEmitter {
         for (const model of followedModels) {
             switch (model.type) {
                 case EventType.Classic:
-                    this.djsClient![model.once ? 'once' : 'on'](model.name as keyof ClientEvents, async (...args) =>
+                    this.djsClient![model.once ? "once" : "on"](model.name as keyof ClientEvents, async (...args) =>
                         model.execute(this, this.database!, ...(args as any[]))
                     );
                     break;
                 case EventType.Custom:
-                    this[model.once ? 'once' : 'on'](model.name as keyof ClientCustomEvents, async (...args) =>
+                    this[model.once ? "once" : "on"](model.name as keyof ClientCustomEvents, async (...args) =>
                         model.execute(this, this.database!, ...(args as any[]))
                     );
                     break;
                 case EventType.Database:
-                    this.database![model.once ? 'once' : 'on'](model.name as keyof MongooseEvents, async (...args) =>
+                    this.database![model.once ? "once" : "on"](model.name as keyof MongooseEvents, async (...args) =>
                         model.execute(this, this.database!, ...(args as any[]))
                     );
                     break;
@@ -163,10 +166,10 @@ export default class Bot extends EventEmitter {
 
     public async fetchCommands(lang: LangValues): Promise<CommandDatas[]> {
         const followedModels: CommandDatas[] = [];
-        let folders: string[] = fs.readdirSync(path.join(path.resolve(__dirname, '..'), 'commands', lang));
+        let folders: string[] = fs.readdirSync(path.join(path.resolve(__dirname, ".."), "commands", lang));
 
         for (const subFolder of folders) {
-            let files: string[] = fs.readdirSync(path.join(path.resolve(__dirname, '..'), 'commands', lang, subFolder));
+            let files: string[] = fs.readdirSync(path.join(path.resolve(__dirname, ".."), "commands", lang, subFolder));
 
             for (const file of files) {
                 let filePath: string = `../commands/${lang}/${subFolder}/${file}`;
@@ -204,7 +207,7 @@ export default class Bot extends EventEmitter {
                 (slash as SlashCommandBuilder | SlashCommandSubcommandBuilder).addAttachmentOption(
                     (option: SlashCommandAttachmentOption): SlashCommandAttachmentOption => {
                         setCommonProperties(option, opt);
-                        option.setRequired(opt.required ?? false)
+                        option.setRequired(opt.required ?? false);
                         return (result = option);
                     }
                 );
@@ -213,7 +216,7 @@ export default class Bot extends EventEmitter {
                 (slash as SlashCommandBuilder | SlashCommandSubcommandBuilder).addBooleanOption(
                     (option: SlashCommandBooleanOption): SlashCommandBooleanOption => {
                         setCommonProperties(option, opt);
-                        option.setRequired(opt.required ?? false)
+                        option.setRequired(opt.required ?? false);
                         return (result = option);
                     }
                 );
@@ -223,7 +226,7 @@ export default class Bot extends EventEmitter {
                     (option: SlashCommandChannelOption): SlashCommandChannelOption => {
                         setCommonProperties(option, opt);
                         if (opt.channelTypes) option.addChannelTypes(opt.channelTypes);
-                        option.setRequired(opt.required ?? false)
+                        option.setRequired(opt.required ?? false);
                         return (result = option);
                     }
                 );
@@ -232,9 +235,22 @@ export default class Bot extends EventEmitter {
                 (slash as SlashCommandBuilder | SlashCommandSubcommandBuilder).addIntegerOption(
                     (option: SlashCommandIntegerOption): SlashCommandIntegerOption => {
                         setCommonProperties(option, opt);
+                        if (opt.choices && opt.choices.length > 0)
+                            option.addChoices(
+                                opt.choices!.map((choice) => {
+                                    const { nameLocalizations, value, name } = choice;
+                                    return {
+                                        name,
+                                        value: typeof value === "string" ? parseInt(value, 10) : value,
+                                        name_localizations: nameLocalizations
+                                    };
+                                })
+                            );
+                        if (opt.autocomplete) option.setAutocomplete(true);
                         if (opt.maxValue) option.setMaxValue(opt.maxValue);
                         if (opt.minValue) option.setMinValue(opt.minValue);
-                        option.setRequired(opt.required ?? false)
+                        option.setRequired(opt.required ?? false);
+
                         return (result = option);
                     }
                 );
@@ -243,7 +259,7 @@ export default class Bot extends EventEmitter {
                 (slash as SlashCommandBuilder | SlashCommandSubcommandBuilder).addMentionableOption(
                     (option: SlashCommandMentionableOption): SlashCommandMentionableOption => {
                         setCommonProperties(option, opt);
-                        option.setRequired(opt.required ?? false)
+                        option.setRequired(opt.required ?? false);
                         return (result = option);
                     }
                 );
@@ -252,9 +268,21 @@ export default class Bot extends EventEmitter {
                 (slash as SlashCommandBuilder | SlashCommandSubcommandBuilder).addNumberOption(
                     (option: SlashCommandNumberOption): SlashCommandNumberOption => {
                         setCommonProperties(option, opt);
+                        if (opt.choices && opt.choices.length > 0)
+                            option.addChoices(
+                                opt.choices!.map((choice) => {
+                                    const { nameLocalizations, value, name } = choice;
+                                    return {
+                                        name,
+                                        value: typeof value === "string" ? parseInt(value, 10) : value,
+                                        name_localizations: nameLocalizations
+                                    };
+                                })
+                            );
+                        if (opt.autocomplete) option.setAutocomplete(true);
                         if (opt.maxValue) option.setMaxValue(opt.maxValue);
                         if (opt.minValue) option.setMinValue(opt.minValue);
-                        option.setRequired(opt.required ?? false)
+                        option.setRequired(opt.required ?? false);
                         return (result = option);
                     }
                 );
@@ -263,7 +291,7 @@ export default class Bot extends EventEmitter {
                 (slash as SlashCommandBuilder | SlashCommandSubcommandBuilder).addRoleOption(
                     (option: SlashCommandRoleOption): SlashCommandRoleOption => {
                         setCommonProperties(option, opt);
-                        option.setRequired(opt.required ?? false)
+                        option.setRequired(opt.required ?? false);
                         return (result = option);
                     }
                 );
@@ -273,13 +301,25 @@ export default class Bot extends EventEmitter {
                     (option: SlashCommandStringOption): SlashCommandStringOption => {
                         setCommonProperties(option, opt);
                         if (opt.autocomplete) option.setAutocomplete(true);
-                        if (opt.choices && opt.choices.length > 0) option.addChoices(opt.choices);
+                        if (opt.choices && opt.choices.length > 0) {
+                            option.addChoices(
+                                opt.choices!.map((choice) => {
+                                    const { nameLocalizations, value, name } = choice;
+                                    return {
+                                        name,
+                                        value: value.toString(),
+                                        name_localizations: nameLocalizations
+                                    };
+                                })
+                            );
+                        }
                         if (opt.maxLength) option.setMaxLength(opt.maxLength);
-                        option.setRequired(opt.required ?? false)
                         if (opt.minLength) option.setMinLength(opt.minLength);
+                        option.setRequired(opt.required ?? false);
                         return (result = option);
                     }
                 );
+
                 break;
             case ApplicationCommandOptionType.Subcommand:
                 (slash as SlashCommandBuilder).addSubcommand(
@@ -303,7 +343,7 @@ export default class Bot extends EventEmitter {
                 (slash as SlashCommandBuilder | SlashCommandSubcommandBuilder).addUserOption(
                     (option: SlashCommandUserOption): SlashCommandUserOption => {
                         setCommonProperties(option, opt);
-                        option.setRequired(opt.required ?? false)
+                        option.setRequired(opt.required ?? false);
                         return (result = option);
                     }
                 );
@@ -322,15 +362,17 @@ export default class Bot extends EventEmitter {
                     case ApplicationCommandType.ChatInput:
                         const slash = new SlashCommandBuilder()
                             .setName(model.name)
-                            .setDescription(model.description ?? 'Pop ! A description is missing here :/')
+                            .setDescription(model.description ?? "Pop ! A description is missing here :/")
                             .setDescriptionLocalizations(
-                                model.descriptionLocalizations ?? { fr: 'Pop ! Une description est manquante ici :/' }
+                                model.descriptionLocalizations ?? { fr: "Pop ! Une description est manquante ici :/" }
                             )
                             .setNameLocalizations(model.nameLocalizations)
                             .setDMPermission(model.customOptions.allowInDms ?? null)
                             .setNSFW(model.customOptions.isNSFW ?? false)
                             .setDefaultMemberPermissions(
-                                model.customOptions?.memberRequiredPermissions[0]?.discordPerm ?? null
+                                model.customOptions?.memberRequiredPermissions[0]
+                                    ? PermissionsBitField.resolve(model.customOptions?.memberRequiredPermissions[0])
+                                    : null
                             );
 
                         for (const option of model.options) await this.addOption(slash, option);
@@ -359,7 +401,7 @@ export default class Bot extends EventEmitter {
             console.log(`Slash ${model.name} has been correctly added to discord.`.bgBlue);
         }
 
-        const rest = new REST({ version: '10' }).setToken(process.env.token);
+        const rest = new REST({ version: "10" }).setToken(process.env.token);
         await rest.put(Routes.applicationCommands(this.djsClient!.user!.id), { body: commands });
         console.log(`Slash commands loaded with success! Amount of slashs: ${commands.length}.`.bgBlue);
     }
@@ -372,7 +414,7 @@ export default class Bot extends EventEmitter {
             if (interaction.isChatInputCommand()) {
                 if (!interaction.deferred) await interaction.deferReply();
                 this.emit(
-                    'slashCommandExecution',
+                    "slashCommandExecution",
                     interaction as CommandInteraction,
                     (await this.fetchCommands(lang as LangValues)).find((cmd) => cmd.name === interaction.commandName)
                 );
@@ -380,7 +422,7 @@ export default class Bot extends EventEmitter {
             if (interaction.isUserContextMenuCommand()) {
                 if (!interaction.deferred) await interaction.deferReply();
                 this.emit(
-                    'userContextCommandExecution',
+                    "userContextCommandExecution",
                     interaction as UserContextMenuCommandInteraction,
                     (await this.fetchCommands(lang as LangValues)).find((cmd) => cmd.name === interaction.commandName)
                 );
@@ -388,25 +430,25 @@ export default class Bot extends EventEmitter {
             if (interaction.isMessageContextMenuCommand()) {
                 if (!interaction.deferred) await interaction.deferReply();
                 this.emit(
-                    'messageContextCommandExecution',
+                    "messageContextCommandExecution",
                     interaction as MessageContextMenuCommandInteraction,
                     (await this.fetchCommands(lang as LangValues)).find((cmd) => cmd.name === interaction.commandName)
                 );
             }
-            if (interaction.isButton()) this.emit('buttonExecution', interaction as ButtonInteraction);
+            if (interaction.isButton()) this.emit("buttonExecution", interaction as ButtonInteraction);
             if (interaction.isRoleSelectMenu())
-                this.emit('roleSelectMenuExecution', interaction as RoleSelectMenuInteraction);
+                this.emit("roleSelectMenuExecution", interaction as RoleSelectMenuInteraction);
             if (interaction.isUserSelectMenu())
-                this.emit('userSelectMenuExecution', interaction as UserSelectMenuInteraction);
+                this.emit("userSelectMenuExecution", interaction as UserSelectMenuInteraction);
             if (interaction.isChannelSelectMenu())
-                this.emit('channelSelectMenuExecution', interaction as ChannelSelectMenuInteraction);
+                this.emit("channelSelectMenuExecution", interaction as ChannelSelectMenuInteraction);
             if (interaction.isStringSelectMenu())
-                this.emit('stringSelectMenuExecution', interaction as StringSelectMenuInteraction);
+                this.emit("stringSelectMenuExecution", interaction as StringSelectMenuInteraction);
             if (interaction.isAnySelectMenu())
-                this.emit('selectMenuExecution', interaction as AnySelectMenuInteraction);
-            if (interaction.isModalSubmit()) this.emit('modalExecution', interaction as ModalSubmitInteraction);
+                this.emit("selectMenuExecution", interaction as AnySelectMenuInteraction);
+            if (interaction.isModalSubmit()) this.emit("modalExecution", interaction as ModalSubmitInteraction);
             if (interaction.isAutocomplete())
-                this.emit('autocompleteExecution', interaction as AutocompleteInteraction);
+                this.emit("autocompleteExecution", interaction as AutocompleteInteraction);
         });
     }
 

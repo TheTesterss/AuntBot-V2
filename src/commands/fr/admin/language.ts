@@ -55,7 +55,7 @@ export const command: CommandDatas = {
         isNSFW: false,
         whitelistDisallowed: false,
         memberRequiredPermissions: [],
-        clientrequiredPermissions: []
+        clientRequiredPermissions: []
     },
     types: [ApplicationCommandType.ChatInput],
     execute: async (
