@@ -12,9 +12,12 @@ import {
     LocalizationMap,
     MessageContextMenuCommandInteraction,
     ModalSubmitInteraction,
+    PermissionFlags,
     PermissionResolvable,
+    PermissionsBitField,
     RoleSelectMenuInteraction,
     StringSelectMenuInteraction,
+    User,
     UserContextMenuCommandInteraction,
     UserSelectMenuInteraction
 } from "discord.js";
@@ -63,7 +66,7 @@ export interface CommandDatas {
             | MessageContextMenuCommandInteraction,
         command: CommandDatas,
         lang: LangValues
-    ) => {};
+    ) => Promise<void>;
 }
 
 export interface CommandDatasOption {

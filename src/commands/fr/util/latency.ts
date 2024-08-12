@@ -6,20 +6,20 @@ import {
     EmbedBuilder,
     MessageContextMenuCommandInteraction,
     UserContextMenuCommandInteraction
-} from 'discord.js';
-import { CommandDatas } from '../../../enums/Interfaces';
-import Bot from '../../../classes/Bot';
-import Database from '../../../classes/Database';
-import { LangValues } from '../../../enums/enums';
+} from "discord.js";
+import { CommandDatas } from "../../../enums/Interfaces";
+import Bot from "../../../classes/Bot";
+import Database from "../../../classes/Database";
+import { LangValues } from "../../../enums/enums";
 
 export const command: CommandDatas = {
-    name: 'latencies',
+    name: "latencies",
     nameLocalizations: {
-        fr: 'latences'
+        fr: "latences"
     },
-    description: 'Show the differents client latencies.',
+    description: "Show the differents client latencies.",
     descriptionLocalizations: {
-        fr: 'Affiche les différentes latences du client.'
+        fr: "Affiche les différentes latences du client."
     },
     options: [],
     customOptions: {
@@ -48,7 +48,7 @@ export const command: CommandDatas = {
     ): Promise<void> => {
         let embed = new EmbedBuilder().setColor(bot.colors.true as ColorResolvable).setFooter({
             iconURL: interaction.client.user.avatarURL() ?? undefined,
-            text: 'Alimenté par Aunt Développement'
+            text: "Alimenté par Aunt Développement"
         });
 
         let message = await interaction.editReply({

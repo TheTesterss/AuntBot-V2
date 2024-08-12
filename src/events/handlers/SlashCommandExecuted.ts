@@ -2,6 +2,7 @@ import {
     ApplicationCommandType,
     ChatInputCommandInteraction,
     ColorResolvable,
+    CommandInteraction,
     EmbedBuilder,
     PermissionsBitField
 } from "discord.js";
@@ -161,6 +162,27 @@ export = {
 
         if (problem) return void (await interaction.editReply({ embeds: [embed] }));
 
-        return void command.execute(main, database, interaction, command, lang as LangValues);
+        try {
+            await command.execute(main, database, interaction, command, lang as LangValues);
+        } catch (e) {
+            try {
+                console.error("Une erreur est survenur lors de l'exécution d'une commande :".bgRed);
+                console.error(e);
+
+                await interaction.editReply({
+                    embeds: [
+                        embed.setDescription(
+                            lang === LangValues.EN
+                                ? "An unexpected error occurred."
+                                : "Une erreur inattendue est survenue."
+                        )
+                    ]
+                });
+            } catch (e) {
+                console.error("Une erreur est servnue lors de prise en charge d'une erreur d'une commande :");
+                console.error(e);
+            }
+        }
+        return;
     }
 };

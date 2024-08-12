@@ -73,7 +73,8 @@ export default class Bot extends EventEmitter {
                 IntentsBitField.Flags.GuildVoiceStates, //? Are the voice users updates recolted ?
                 IntentsBitField.Flags.Guilds, //? Are the guilds collected ?
                 IntentsBitField.Flags.MessageContent, //? Is the content of the messages recolted ?
-                IntentsBitField.Flags.GuildMessageTyping //? Are message typed notified ?
+                IntentsBitField.Flags.GuildMessageTyping, //? Are message typed notified ?
+                IntentsBitField.Flags.GuildModeration
             ],
             partials: [
                 Partials.Channel,
@@ -254,6 +255,7 @@ export default class Bot extends EventEmitter {
                         return (result = option);
                     }
                 );
+
                 break;
             case ApplicationCommandOptionType.Mentionable:
                 (slash as SlashCommandBuilder | SlashCommandSubcommandBuilder).addMentionableOption(
@@ -300,7 +302,9 @@ export default class Bot extends EventEmitter {
                 (slash as SlashCommandBuilder | SlashCommandSubcommandBuilder).addStringOption(
                     (option: SlashCommandStringOption): SlashCommandStringOption => {
                         setCommonProperties(option, opt);
+
                         if (opt.autocomplete) option.setAutocomplete(true);
+
                         if (opt.choices && opt.choices.length > 0) {
                             option.addChoices(
                                 opt.choices!.map((choice) => {
@@ -313,8 +317,10 @@ export default class Bot extends EventEmitter {
                                 })
                             );
                         }
+
                         if (opt.maxLength) option.setMaxLength(opt.maxLength);
                         if (opt.minLength) option.setMinLength(opt.minLength);
+
                         option.setRequired(opt.required ?? false);
                         return (result = option);
                     }
@@ -462,6 +468,7 @@ export default class Bot extends EventEmitter {
             throw new TypeError("It seems like your bot token doesn't correspond to a valid discord bot token.");
 
         await this.djsClient!.login(token).catch((e) => console.error);
+
         await this.runEvents();
         await this.createCommands();
         this.waitForCommandExecution();

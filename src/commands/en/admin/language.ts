@@ -4,6 +4,7 @@ import {
     ChatInputCommandInteraction,
     ColorResolvable,
     EmbedBuilder,
+    GuildMember,
     MessageContextMenuCommandInteraction,
     UserContextMenuCommandInteraction
 } from "discord.js";
