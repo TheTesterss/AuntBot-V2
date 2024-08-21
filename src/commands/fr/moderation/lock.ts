@@ -83,7 +83,11 @@ export const command: CommandDatas = {
 
         if (!channel || !channel.isTextBased()) {
             await interaction.editReply({
-                embeds: [errorEmbed.setDescription("Salon invalide ou ce type de salon ne peut pas être verrouillé.")]
+                embeds: [
+                    errorEmbed.setDescription(
+                        "<:9692redguard:1274033795615424582> Salon invalide ou ce type de salon ne peut pas être verrouillé."
+                    )
+                ]
             });
             return;
         }
@@ -93,18 +97,30 @@ export const command: CommandDatas = {
                 const threadChannel = channel as ThreadChannel;
                 await threadChannel.setLocked(true);
                 await interaction.editReply({
-                    embeds: [embed.setDescription(`Le thread <#${channel.id}> a été verrouillé avec succès.`)]
+                    embeds: [
+                        embed.setDescription(
+                            `<:8181greendot:1274033444006920272> Le thread <#${channel.id}> a été verrouillé avec succès.`
+                        )
+                    ]
                 });
             } else {
                 const textChannel = channel as TextChannel;
                 await textChannel.permissionOverwrites.edit(textChannel.guild.roles.everyone, { SendMessages: false });
                 await interaction.editReply({
-                    embeds: [embed.setDescription(`Le salon <#${channel.id}> a été verrouillé avec succès.`)]
+                    embeds: [
+                        embed.setDescription(
+                            `<:8181greendot:1274033444006920272> Le salon <#${channel.id}> a été verrouillé avec succès.`
+                        )
+                    ]
                 });
             }
         } catch {
             await interaction.editReply({
-                embeds: [errorEmbed.setDescription("Une erreur s'est produite lors du verrouillage du salon.")]
+                embeds: [
+                    errorEmbed.setDescription(
+                        "<:9692redguard:1274033795615424582> Une erreur s'est produite lors du verrouillage du salon."
+                    )
+                ]
             });
         }
     }

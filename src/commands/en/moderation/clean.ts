@@ -69,26 +69,26 @@ export const command: CommandDatas = {
     // #endregion datas
     execute: async (
         bot: Bot,
-        database: Database,
+        _database: Database,
         interaction:
             | ChatInputCommandInteraction
             | UserContextMenuCommandInteraction
             | MessageContextMenuCommandInteraction,
-        command: CommandDatas,
-        lang: LangValues
+        _command: CommandDatas,
+        _lang: LangValues
     ): Promise<void> => {
         interaction = interaction as ChatInputCommandInteraction;
-        const errorEmbed = new EmbedBuilder().setTitle("Erreur").setColor(bot.colors.false as ColorResolvable);
+        const errorEmbed = new EmbedBuilder().setTitle("Error").setColor(bot.colors.false as ColorResolvable);
         const embed = new EmbedBuilder().setColor(bot.colors.true as ColorResolvable).setFooter({
             iconURL: interaction.client.user.avatarURL() ?? undefined,
-            text: "Alimenté par Aunt Développement"
+            text: "Powered by Aunt Development"
         });
 
         const number = interaction.options.getInteger("number", true);
         const user = interaction.options.getUser("user", false);
         const filter = interaction.options.getString("filter", false);
 
-        const msg = await interaction.editReply("Suppression des messages...");
+        const msg = await interaction.editReply("Deleting messages...");
 
         const twoWeeksAgo = Date.now() - 14 * 24 * 60 * 60 * 1000;
         let collectedMessages: Message<boolean>[] = [];
@@ -131,7 +131,11 @@ export const command: CommandDatas = {
         if (collectedMessages.length === 0) {
             await interaction.editReply({
                 content: "",
-                embeds: [errorEmbed.setDescription("Aucun message correspondant à ces paramètres trouvé.")]
+                embeds: [
+                    errorEmbed.setDescription(
+                        "<:9692redguard:1274033795615424582> No messages matching these parameters were found."
+                    )
+                ]
             });
             return;
         }
@@ -141,7 +145,11 @@ export const command: CommandDatas = {
         if (!interaction.channel || !interaction.channel.isTextBased() || interaction.channel.type === ChannelType.DM) {
             await interaction.editReply({
                 content: "",
-                embeds: [errorEmbed.setDescription("Cette commande ne peut pas être utilisée dans ce type de salon.")]
+                embeds: [
+                    errorEmbed.setDescription(
+                        "<:9692redguard:1274033795615424582> This command cannot be used in this type of channel."
+                    )
+                ]
             });
             return;
         }
@@ -152,7 +160,11 @@ export const command: CommandDatas = {
         } catch {
             await interaction.editReply({
                 content: "",
-                embeds: [errorEmbed.setDescription("Une erreur s'est produite lors de la suppression des messages.")]
+                embeds: [
+                    errorEmbed.setDescription(
+                        "<:9692redguard:1274033795615424582> An error occurred while deleting the messages."
+                    )
+                ]
             });
             return;
         }
@@ -160,17 +172,19 @@ export const command: CommandDatas = {
         if (size === number) {
             await interaction.editReply({
                 content: "",
-                embeds: [embed.setDescription(`J'ai bien supprimé ${number} messages.`)]
+                embeds: [
+                    embed.setDescription(`<:8181greendot:1274033444006920272> Successfully deleted ${number} messages.`)
+                ]
             });
         } else {
             await interaction.editReply({
                 content: "",
                 embeds: [
                     embed.setDescription(
-                        `Je n'ai pas pu supprimer autant de messages, seulement ${size} message${
+                        `<:3100yellowdot:1274033394430377985> I couldn't delete that many messages, only ${size} message${
                             size > 1
-                                ? "s ont pu être effacés car ils correspondaient aux critères et dataient de moins de 2 semaines"
-                                : " a pu être effacé car il correspondait aux critères et datait de moins de 2 semaines"
+                                ? "s were deleted because they matched the criteria and were less than 2 weeks old"
+                                : " was deleted because it matched the criteria and was less than 2 weeks old"
                         }.`
                     )
                 ]

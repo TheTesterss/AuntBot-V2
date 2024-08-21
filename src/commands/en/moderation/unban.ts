@@ -79,7 +79,7 @@ export const command: CommandDatas = {
         try {
             targetUser = await bot.djsClient?.users.fetch(targetUserId);
         } catch {
-            errorEmbed.setDescription(`No user with ID "${targetUserId}" found.`);
+            errorEmbed.setDescription(`<:9692redguard:1274033795615424582> No user with ID "${targetUserId}" found.`);
 
             await interaction.editReply({ embeds: [errorEmbed] });
             return;
@@ -88,7 +88,9 @@ export const command: CommandDatas = {
         try {
             await interaction.guild?.members.unban(targetUserId, reason);
         } catch {
-            errorEmbed.setDescription("I couldn't unban this user because they are not banned.");
+            errorEmbed.setDescription(
+                "<:9692redguard:1274033795615424582> I couldn't unban this user because they are not banned."
+            );
 
             await interaction.editReply({ embeds: [errorEmbed] });
             return;
@@ -102,7 +104,7 @@ export const command: CommandDatas = {
         embed
             .setTitle(`Successfully unbanned!`)
             .setDescription(
-                `The member ${targetUser} (\`${targetUser?.id}\`) has been unbanned!\n> **Reason:** ${reason}`
+                `<:8181greendot:1274033444006920272> The member ${targetUser} (\`${targetUser?.id}\`) has been unbanned!\n> <:6442nanewsicon:1271775861938327592> **Reason:** ${reason}`
             );
 
         await interaction.editReply({ embeds: [embed] });

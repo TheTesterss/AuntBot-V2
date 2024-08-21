@@ -124,7 +124,11 @@ export const command: CommandDatas = {
 
         if (!interaction.guild) {
             await interaction.editReply({
-                embeds: [errorEmbed.setDescription("Cette commande ne peut qu'être faite sur un serveur.")]
+                embeds: [
+                    errorEmbed.setDescription(
+                        "<:9692redguard:1274033795615424582> Cette commande ne peut qu'être faite sur un serveur."
+                    )
+                ]
             });
             return;
         }
@@ -137,7 +141,11 @@ export const command: CommandDatas = {
 
         if (isUserBanned) {
             await interaction.editReply({
-                embeds: [errorEmbed.setDescription("Je ne peux pas bannir un utilisateur déjà banni.")]
+                embeds: [
+                    errorEmbed.setDescription(
+                        "<:9692redguard:1274033795615424582> Je ne peux pas bannir un utilisateur déjà banni."
+                    )
+                ]
             });
             return;
         }
@@ -151,7 +159,7 @@ export const command: CommandDatas = {
 
                 if (targetUserRolePosition >= requestUserRolePosition) {
                     errorEmbed.setDescription(
-                        "Vous ne pouvez pas bannir ce membre car il a le même plus haut rôle que vous voire un rôle au dessus."
+                        "<:9692redguard:1274033795615424582> Vous ne pouvez pas bannir ce membre car il a le même plus haut rôle que vous voire un rôle au dessus."
                     );
 
                     await interaction.editReply({ embeds: [errorEmbed] });
@@ -162,7 +170,7 @@ export const command: CommandDatas = {
 
         if (pruneTimeInSeconds === null) {
             errorEmbed.setDescription(
-                "Durée de purge invalide. Veuillez utiliser ce format : `d` ou `j` pour les jours, `h` pour les heures, `min` pour les minutes et `s` pour les secondes."
+                "<:9692redguard:1274033795615424582> Durée de purge invalide. Veuillez utiliser ce format : `d` ou `j` pour les jours, `h` pour les heures, `min` pour les minutes et `s` pour les secondes."
             );
 
             await interaction.editReply({ embeds: [errorEmbed] });
@@ -170,7 +178,9 @@ export const command: CommandDatas = {
         }
 
         if (pruneTimeInSeconds > 604800) {
-            errorEmbed.setDescription("Durée de purge invalide. La durée totale ne peut excéder 7 jours.");
+            errorEmbed.setDescription(
+                "<:9692redguard:1274033795615424582> Durée de purge invalide. La durée totale ne peut excéder 7 jours."
+            );
 
             await interaction.editReply({ embeds: [errorEmbed] });
             return;
@@ -186,7 +196,7 @@ export const command: CommandDatas = {
                     deleteMessageSeconds: pruneTimeInSeconds
                 });
             } catch {
-                errorEmbed.setDescription("Je n'ai pas pu bannir cet utilisateur.");
+                errorEmbed.setDescription("<:9692redguard:1274033795615424582> Je n'ai pas pu bannir cet utilisateur.");
 
                 await interaction.editReply({ embeds: [errorEmbed] });
                 return;
@@ -198,7 +208,7 @@ export const command: CommandDatas = {
                 await interaction.editReply({
                     embeds: [
                         errorEmbed.setDescription(
-                            "Durée de bannissement invalide. Veuillez utiliser ce format : `y` pour les années, `M` ou `mon` pour les mois, `w` pour les semaines, `d` ou `j` pour les jours, `h` pour les heures, `min` pour les minutes et `s` pour les secondes."
+                            "<:9692redguard:1274033795615424582> Durée de bannissement invalide. Veuillez utiliser ce format : `y` pour les années, `M` ou `mon` pour les mois, `w` pour les semaines, `d` ou `j` pour les jours, `h` pour les heures, `min` pour les minutes et `s` pour les secondes."
                         )
                     ]
                 });
@@ -211,7 +221,11 @@ export const command: CommandDatas = {
 
             if (!banned) {
                 await interaction.editReply({
-                    embeds: [errorEmbed.setDescription("Je n'ai pas pu bannir ce membre.")]
+                    embeds: [
+                        errorEmbed.setDescription(
+                            "<:9692redguard:1274033795615424582> Je n'ai pas pu bannir ce membre."
+                        )
+                    ]
                 });
                 return;
             }
@@ -229,11 +243,11 @@ export const command: CommandDatas = {
             let embedNotif = embed
                 .setTitle("Vous avez été banni")
                 .setDescription(
-                    `Vous avez été banni du serveur ${interaction.guild.name} :\n> **Modérateur :** ${interaction.user.displayName} (\`${interaction.user.id}\`)`
+                    `<:icons_ban:1275820197370138765> Vous avez été banni du serveur ${interaction.guild.name} :\n> <:9829namodicon:1271775961272029206> **Modérateur :** ${interaction.user.displayName} (\`${interaction.user.id}\`)`
                 );
 
             if (notify === "yes_with_reason") {
-                embedNotif.data.description += `\n > **Raison :** ${reason}`;
+                embedNotif.data.description += `\n > <:6442nanewsicon:1271775861938327592> **Raison :** ${reason}`;
             }
 
             try {
@@ -253,7 +267,7 @@ export const command: CommandDatas = {
         embed
             .setTitle(`Banni avec succès !`)
             .setDescription(
-                `Le membre ${targetUser} (\`${targetUser.id}\`) a bien été banni ${duration ? `pour ${humanizeTime(durationMs as number, "ms", lang)} ` : ""}!\n> **Raison :** ${reason}\n > ${sent ? "L'utilisateur a bien été prévenu." : notify === "no" ? "L'utilisateur n'a pas été prévenu." : "Je n'ai pas pu prévenir l'utilisateur (ses DMs sont désactivés)."}`
+                `<:icons_ban:1275820197370138765> Le membre ${targetUser} (\`${targetUser.id}\`) a bien été banni ${duration ? `pour ${humanizeTime(durationMs as number, "ms", lang)} ` : ""}!\n> <:6442nanewsicon:1271775861938327592> **Raison :** ${reason}\n > ${sent ? "L'utilisateur a bien été prévenu." : notify === "no" ? "L'utilisateur n'a pas été prévenu." : "Je n'ai pas pu prévenir l'utilisateur (ses DMs sont désactivés)."}`
             );
 
         await interaction.editReply({ embeds: [embed] });

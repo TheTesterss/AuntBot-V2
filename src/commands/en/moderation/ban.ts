@@ -115,16 +115,20 @@ export const command: CommandDatas = {
 
         const targetUser = interaction.options.getUser("user", true);
         const targetId = targetUser.id;
-        const reason = interaction.options.getString("reason", false) || "Pas de raison spécifiée.";
+        const reason = interaction.options.getString("reason", false) || "No reason specified.";
         const notify = interaction.options.getString("notify", false) || "no";
         const pruneTimeInSeconds = parseTime(interaction.options.getString("prune-time", false) || "0s", "s");
         const duration = interaction.options.getString("duration", false);
 
-        let errorEmbed = new EmbedBuilder().setTitle("Erreur").setColor(bot.colors.false as ColorResolvable);
+        let errorEmbed = new EmbedBuilder().setTitle("Error").setColor(bot.colors.false as ColorResolvable);
 
         if (!interaction.guild) {
             await interaction.editReply({
-                embeds: [errorEmbed.setDescription("Cette commande ne peut qu'être faite sur un serveur.")]
+                embeds: [
+                    errorEmbed.setDescription(
+                        "<:9692redguard:1274033795615424582> This command can only be executed on a server."
+                    )
+                ]
             });
             return;
         }
@@ -137,7 +141,11 @@ export const command: CommandDatas = {
 
         if (isUserBanned) {
             await interaction.editReply({
-                embeds: [errorEmbed.setDescription("Je ne peux pas bannir un utilisateur déjà banni.")]
+                embeds: [
+                    errorEmbed.setDescription(
+                        "<:9692redguard:1274033795615424582> I cannot ban a user who is already banned."
+                    )
+                ]
             });
             return;
         }
@@ -151,7 +159,7 @@ export const command: CommandDatas = {
 
                 if (targetUserRolePosition >= requestUserRolePosition) {
                     errorEmbed.setDescription(
-                        "Vous ne pouvez pas bannir ce membre car il a le même plus haut rôle que vous voire un rôle au dessus."
+                        "<:9692redguard:1274033795615424582> You cannot ban this member as they have the same or a higher role than you."
                     );
 
                     await interaction.editReply({ embeds: [errorEmbed] });
@@ -162,7 +170,7 @@ export const command: CommandDatas = {
 
         if (pruneTimeInSeconds === null) {
             errorEmbed.setDescription(
-                "Durée de purge invalide. Veuillez utiliser ce format : `d` ou `j` pour les jours, `h` pour les heures, `min` pour les minutes et `s` pour les secondes."
+                "<:9692redguard:1274033795615424582> Invalid prune duration. Please use the following format: `d` or `j` for days, `h` for hours, `min` for minutes, and `s` for seconds."
             );
 
             await interaction.editReply({ embeds: [errorEmbed] });
@@ -170,7 +178,9 @@ export const command: CommandDatas = {
         }
 
         if (pruneTimeInSeconds > 604800) {
-            errorEmbed.setDescription("Durée de purge invalide. La durée totale ne peut excéder 7 jours.");
+            errorEmbed.setDescription(
+                "<:9692redguard:1274033795615424582> Invalid prune duration. The total duration cannot exceed 7 days."
+            );
 
             await interaction.editReply({ embeds: [errorEmbed] });
             return;
@@ -186,7 +196,7 @@ export const command: CommandDatas = {
                     deleteMessageSeconds: pruneTimeInSeconds
                 });
             } catch {
-                errorEmbed.setDescription("Je n'ai pas pu bannir cet utilisateur.");
+                errorEmbed.setDescription("<:9692redguard:1274033795615424582> I couldn't ban this user.");
 
                 await interaction.editReply({ embeds: [errorEmbed] });
                 return;
@@ -198,7 +208,7 @@ export const command: CommandDatas = {
                 await interaction.editReply({
                     embeds: [
                         errorEmbed.setDescription(
-                            "Durée de bannissement invalide. Veuillez utiliser ce format : `y` pour les années, `M` ou `mon` pour les mois, `w` pour les semaines, `d` ou `j` pour les jours, `h` pour les heures, `min` pour les minutes et `s` pour les secondes."
+                            "<:9692redguard:1274033795615424582> Invalid ban duration. Please use the following format: `y` for years, `M` or `mon` for months, `w` for weeks, `d` or `j` for days, `h` for hours, `min` for minutes, and `s` for seconds."
                         )
                     ]
                 });
@@ -211,7 +221,9 @@ export const command: CommandDatas = {
 
             if (!banned) {
                 await interaction.editReply({
-                    embeds: [errorEmbed.setDescription("Je n'ai pas pu bannir ce membre.")]
+                    embeds: [
+                        errorEmbed.setDescription("<:9692redguard:1274033795615424582> I couldn't ban this member.")
+                    ]
                 });
                 return;
             }
@@ -221,19 +233,19 @@ export const command: CommandDatas = {
 
         let embed = new EmbedBuilder().setColor(bot.colors.true as ColorResolvable).setFooter({
             iconURL: interaction.client.user.avatarURL() ?? undefined,
-            text: "Alimenté par Aunt Développement"
+            text: "Powered by Aunt Development"
         });
 
         let sent = false;
         if (notify !== "no") {
             let embedNotif = embed
-                .setTitle("Vous avez été banni")
+                .setTitle("You have been banned")
                 .setDescription(
-                    `Vous avez été banni du serveur ${interaction.guild.name} :\n> **Modérateur :** ${interaction.user.displayName} (\`${interaction.user.id}\`)`
+                    `<:icons_ban:1275820197370138765> You have been banned from the server ${interaction.guild.name}:\n> <:9829namodicon:1271775961272029206> **Moderator:** ${interaction.user.displayName} (\`${interaction.user.id}\`)`
                 );
 
             if (notify === "yes_with_reason") {
-                embedNotif.data.description += `\n > **Raison :** ${reason}`;
+                embedNotif.data.description += `\n > <:6442nanewsicon:1271775861938327592> **Reason:** ${reason}`;
             }
 
             try {
@@ -251,9 +263,9 @@ export const command: CommandDatas = {
         await thisGuildDb.save();
 
         embed
-            .setTitle(`Banni avec succès !`)
+            .setTitle(`Banned successfully!`)
             .setDescription(
-                `Le membre ${targetUser} (\`${targetUser.id}\`) a bien été banni ${duration ? `pour ${humanizeTime(durationMs as number, "ms", lang)} ` : ""}!\n> **Raison :** ${reason}\n > ${sent ? "L'utilisateur a bien été prévenu." : notify === "no" ? "L'utilisateur n'a pas été prévenu." : "Je n'ai pas pu prévenir l'utilisateur (ses DMs sont désactivés)."}`
+                `<:icons_ban:1275820197370138765> The member ${targetUser} (\`${targetUser.id}\`) has been banned ${duration ? `for ${humanizeTime(durationMs as number, "ms", lang)} ` : ""}!\n> <:6442nanewsicon:1271775861938327592> **Reason:** ${reason}\n > ${sent ? "The user has been notified." : notify === "no" ? "The user was not notified." : "I couldn't notify the user (their DMs are disabled)."}`
             );
 
         await interaction.editReply({ embeds: [embed] });

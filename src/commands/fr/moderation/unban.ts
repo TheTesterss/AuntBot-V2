@@ -71,15 +71,17 @@ export const command: CommandDatas = {
         interaction = interaction as ChatInputCommandInteraction;
 
         const targetUserId = interaction.options.getString("id", true);
-        const reason = interaction.options.getString("reason", false) || "No reason specified.";
+        const reason = interaction.options.getString("reason", false) || "Aucune raison spécifiée.";
 
-        let errorEmbed = new EmbedBuilder().setTitle("Error").setColor(bot.colors.false as ColorResolvable);
+        let errorEmbed = new EmbedBuilder().setTitle("Erreur").setColor(bot.colors.false as ColorResolvable);
 
         let targetUser;
         try {
             targetUser = await bot.djsClient?.users.fetch(targetUserId);
         } catch {
-            errorEmbed.setDescription(`No user with ID "${targetUserId}" found.`);
+            errorEmbed.setDescription(
+                `<:9692redguard:1274033795615424582> Aucun utilisateur avec l'ID "${targetUserId}" trouvé.`
+            );
 
             await interaction.editReply({ embeds: [errorEmbed] });
             return;
@@ -88,7 +90,9 @@ export const command: CommandDatas = {
         try {
             await interaction.guild?.members.unban(targetUserId, reason);
         } catch {
-            errorEmbed.setDescription("I couldn't unban this user because they are not banned.");
+            errorEmbed.setDescription(
+                "<:9692redguard:1274033795615424582> Je n'ai pas pu débannir cet utilisateur car il n'est pas banni."
+            );
 
             await interaction.editReply({ embeds: [errorEmbed] });
             return;
@@ -96,13 +100,13 @@ export const command: CommandDatas = {
 
         let embed = new EmbedBuilder().setColor(bot.colors.true as ColorResolvable).setFooter({
             iconURL: interaction.client.user.avatarURL() ?? undefined,
-            text: "Powered by Aunt Development"
+            text: "Alimenté par Aunt Développement"
         });
 
         embed
-            .setTitle(`Successfully unbanned!`)
+            .setTitle(`Débannissement réussi !`)
             .setDescription(
-                `The member ${targetUser} (\`${targetUser?.id}\`) has been unbanned!\n> **Reason:** ${reason}`
+                `<:8181greendot:1274033444006920272> Le membre ${targetUser} (\`${targetUser?.id}\`) a été débanni !\n> <:6442nanewsicon:1271775861938327592> **Raison :** ${reason}`
             );
 
         await interaction.editReply({ embeds: [embed] });

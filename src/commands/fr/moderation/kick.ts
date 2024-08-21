@@ -86,7 +86,9 @@ export const command: CommandDatas = {
         if (!targetMember) {
             await interaction.editReply({
                 embeds: [
-                    errorEmbed.setDescription("Vous ne pouvez pas expulser un utiliser qui n'est pas sur le serveur.")
+                    errorEmbed.setDescription(
+                        "<:9692redguard:1274033795615424582> Vous ne pouvez pas expulser un utiliser qui n'est pas sur le serveur."
+                    )
                 ]
             });
             return;
@@ -96,7 +98,11 @@ export const command: CommandDatas = {
 
         if (targetMember.id === interaction.guild.ownerId) {
             await interaction.reply({
-                embeds: [errorEmbed.setDescription("Vous ne pouvez pas exclure le propriétaire du serveur.")],
+                embeds: [
+                    errorEmbed.setDescription(
+                        "<:9692redguard:1274033795615424582> Vous ne pouvez pas exclure le propriétaire du serveur."
+                    )
+                ],
                 ephemeral: true
             });
             return;
@@ -106,7 +112,7 @@ export const command: CommandDatas = {
             await interaction.editReply({
                 embeds: [
                     errorEmbed.setDescription(
-                        "Vous ne pouvez pas expulser cet utilisateur car il est plus haut ou au même niveau que vous dans la hierarchie."
+                        "<:9692redguard:1274033795615424582> Vous ne pouvez pas expulser cet utilisateur car il est plus haut ou au même niveau que vous dans la hierarchie."
                     )
                 ]
             });
@@ -117,7 +123,7 @@ export const command: CommandDatas = {
             await interaction.editReply({
                 embeds: [
                     errorEmbed.setDescription(
-                        "Je ne peux pas expulser cet utilisateur. Il est peut-être plus haut que moi dans la hiérarchie."
+                        "<:9692redguard:1274033795615424582> Je ne peux pas expulser cet utilisateur. Il est peut-être plus haut que moi dans la hiérarchie."
                     )
                 ]
             });
@@ -129,13 +135,17 @@ export const command: CommandDatas = {
             await interaction.editReply({
                 embeds: [
                     embed.setDescription(
-                        `L'utilisateur ${targetMember.user.tag} a été expulsé avec succès. \n**Raison**: ${reason}`
+                        `<:icons_kick:1271775530634444902> L'utilisateur ${targetMember.user.tag} a été expulsé avec succès. \n<:6442nanewsicon:1271775861938327592> **Raison**: ${reason}`
                     )
                 ]
             });
         } catch {
             await interaction.editReply({
-                embeds: [errorEmbed.setDescription("Une erreur s'est produite lors de l'expulsion de l'utilisateur.")]
+                embeds: [
+                    errorEmbed.setDescription(
+                        "<:9692redguard:1274033795615424582> Une erreur s'est produite lors de l'expulsion de l'utilisateur."
+                    )
+                ]
             });
         }
     }

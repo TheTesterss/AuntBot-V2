@@ -73,17 +73,21 @@ export const command: CommandDatas = {
     ): Promise<void> => {
         interaction = interaction as ChatInputCommandInteraction;
 
-        const errorEmbed = new EmbedBuilder().setTitle("Erreur").setColor(bot.colors.false as ColorResolvable);
+        const errorEmbed = new EmbedBuilder().setTitle("Error").setColor(bot.colors.false as ColorResolvable);
         const embed = new EmbedBuilder().setColor(bot.colors.true as ColorResolvable).setFooter({
             iconURL: interaction.client.user.avatarURL() ?? undefined,
-            text: "Alimenté par Aunt Développement"
+            text: "Powered by Aunt Development"
         });
 
         const channel = (interaction.options.getChannel("channel", false) as TextBasedChannel) || interaction.channel;
 
         if (!channel || !channel.isTextBased()) {
             await interaction.editReply({
-                embeds: [errorEmbed.setDescription("Salon invalide ou ce type de salon ne peut pas être déverrouillé.")]
+                embeds: [
+                    errorEmbed.setDescription(
+                        "<:9692redguard:1274033795615424582> Invalid channel or this type of channel cannot be unlocked."
+                    )
+                ]
             });
             return;
         }
@@ -93,18 +97,30 @@ export const command: CommandDatas = {
                 const threadChannel = channel as ThreadChannel;
                 await threadChannel.setLocked(false);
                 await interaction.editReply({
-                    embeds: [embed.setDescription(`Le thread <#${channel.id}> a été déverrouillé avec succès.`)]
+                    embeds: [
+                        embed.setDescription(
+                            `<:8181greendot:1274033444006920272> The thread <#${channel.id}> has been successfully unlocked.`
+                        )
+                    ]
                 });
             } else {
                 const textChannel = channel as TextChannel;
                 await textChannel.permissionOverwrites.edit(textChannel.guild.roles.everyone, { SendMessages: null });
                 await interaction.editReply({
-                    embeds: [embed.setDescription(`Le salon <#${channel.id}> a été déverrouillé avec succès.`)]
+                    embeds: [
+                        embed.setDescription(
+                            `<:8181greendot:1274033444006920272> The channel <#${channel.id}> has been successfully unlocked.`
+                        )
+                    ]
                 });
             }
         } catch {
             await interaction.editReply({
-                embeds: [errorEmbed.setDescription("Une erreur s'est produite lors du déverrouillage du salon.")]
+                embeds: [
+                    errorEmbed.setDescription(
+                        "<:9692redguard:1274033795615424582> An error occurred while unlocking the channel."
+                    )
+                ]
             });
         }
     }

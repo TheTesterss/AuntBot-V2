@@ -88,17 +88,21 @@ export const command: CommandDatas = {
         _lang: LangValues
     ): Promise<void> => {
         interaction = interaction as ChatInputCommandInteraction;
-        const errorEmbed = new EmbedBuilder().setTitle("Erreur").setColor(bot.colors.false as ColorResolvable);
+        const errorEmbed = new EmbedBuilder().setTitle("Error").setColor(bot.colors.false as ColorResolvable);
         const embed = new EmbedBuilder().setColor(bot.colors.true as ColorResolvable).setFooter({
             iconURL: interaction.client.user.avatarURL() ?? undefined,
-            text: "Alimenté par Aunt Développement"
+            text: "Powered by Aunt Development"
         });
 
         const channel = interaction.channel;
 
         if (!channel?.isTextBased() || channel.isDMBased()) {
             await interaction.editReply({
-                embeds: [errorEmbed.setDescription("Cette commande ne peut pas être utilisée dans ce salon.")]
+                embeds: [
+                    errorEmbed.setDescription(
+                        "<:9692redguard:1274033795615424582> This command cannot be used in this channel."
+                    )
+                ]
             });
             return;
         }
@@ -107,14 +111,18 @@ export const command: CommandDatas = {
         const lastMessageId = interaction.options.getString("last_message");
 
         const replyMessage = await interaction.editReply({
-            embeds: [embed.setDescription("Suppression des messages en cours...")]
+            embeds: [embed.setDescription("Deleting messages...")]
         });
 
         try {
             const firstMessage = await channel.messages.fetch(firstMessageId);
             if (!firstMessage) {
                 await interaction.editReply({
-                    embeds: [errorEmbed.setDescription("Le premier message spécifié est introuvable dans ce canal.")]
+                    embeds: [
+                        errorEmbed.setDescription(
+                            "<:9692redguard:1274033795615424582> The specified first message could not be found in this channel."
+                        )
+                    ]
                 });
                 return;
             }
@@ -125,7 +133,9 @@ export const command: CommandDatas = {
                 if (!lastMessage) {
                     await interaction.editReply({
                         embeds: [
-                            errorEmbed.setDescription("Le dernier message spécifié est introuvable dans ce canal.")
+                            errorEmbed.setDescription(
+                                "<:9692redguard:1274033795615424582> The specified last message could not be found in this channel."
+                            )
                         ]
                     });
                     return;
@@ -138,7 +148,7 @@ export const command: CommandDatas = {
                 await interaction.editReply({
                     embeds: [
                         errorEmbed.setDescription(
-                            "Le premier message ne peut pas être plus récent que le dernier message."
+                            "<:9692redguard:1274033795615424582> The first message cannot be more recent than the last message."
                         )
                     ]
                 });
@@ -150,7 +160,7 @@ export const command: CommandDatas = {
                 await interaction.editReply({
                     embeds: [
                         errorEmbed.setDescription(
-                            "Le dernier message spécifié date de plus de 2 semaines et ne peut pas être supprimé."
+                            "<:9692redguard:1274033795615424582> The specified last message is older than 2 weeks and cannot be deleted."
                         )
                     ]
                 });
@@ -196,15 +206,19 @@ export const command: CommandDatas = {
             const totalToDelete = filteredMessages.length;
             const description =
                 totalDeleted === totalToDelete
-                    ? `La conversation (de ${totalDeleted} messages) a été effacée avec succès.`
-                    : `La conversation a été partiellement effacée. ${totalDeleted}/${totalToDelete} messages ont été supprimés. Les autres messages n'ont pas pu être effacés car ils datent de plus de 2 semaines.`;
+                    ? `<:8181greendot:1274033444006920272> The conversation (of ${totalDeleted} messages) was successfully deleted.`
+                    : `<:3100yellowdot:1274033394430377985> The conversation was partially deleted. ${totalDeleted}/${totalToDelete} messages were deleted. The others couldn't be deleted as they are older than 2 weeks.`;
 
             await interaction.editReply({
                 embeds: [embed.setDescription(description)]
             });
         } catch {
             await interaction.editReply({
-                embeds: [errorEmbed.setDescription("Une erreur s'est produite lors de la suppression des messages.")]
+                embeds: [
+                    errorEmbed.setDescription(
+                        "<:9692redguard:1274033795615424582> An error occurred while deleting the messages."
+                    )
+                ]
             });
         }
     }

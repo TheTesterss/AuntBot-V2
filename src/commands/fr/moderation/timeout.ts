@@ -97,7 +97,7 @@ export const command: CommandDatas = {
             await interaction.editReply({
                 embeds: [
                     errorEmbed.setDescription(
-                        "Vous ne pouvez pas exclure temporairement un utilisateur qui n'est pas sur le serveur."
+                        "<:9692redguard:1274033795615424582> Vous ne pouvez pas exclure temporairement un utilisateur qui n'est pas sur le serveur."
                     )
                 ]
             });
@@ -107,7 +107,9 @@ export const command: CommandDatas = {
         if (targetMember.id === interaction.guild.ownerId) {
             await interaction.editReply({
                 embeds: [
-                    errorEmbed.setDescription("Vous ne pouvez pas exclure temporairement le propriétaire du serveur.")
+                    errorEmbed.setDescription(
+                        "<:9692redguard:1274033795615424582> Vous ne pouvez pas exclure temporairement le propriétaire du serveur."
+                    )
                 ]
             });
             return;
@@ -117,7 +119,7 @@ export const command: CommandDatas = {
             await interaction.editReply({
                 embeds: [
                     errorEmbed.setDescription(
-                        "Vous ne pouvez pas exclure temporairement un utilisateur avec un rôle supérieur ou égal au vôtre."
+                        "<:9692redguard:1274033795615424582> Vous ne pouvez pas exclure temporairement un utilisateur avec un rôle supérieur ou égal au vôtre."
                     )
                 ]
             });
@@ -129,7 +131,7 @@ export const command: CommandDatas = {
             await interaction.editReply({
                 embeds: [
                     errorEmbed.setDescription(
-                        "Durée invalide. Veuillez utiliser ce format : `d` ou `j` pour les jours, `h` pour les heures, `min` pour les minutes et `s` pour les secondes."
+                        "<:9692redguard:1274033795615424582> Durée invalide. Veuillez utiliser ce format : `d` ou `j` pour les jours, `h` pour les heures, `min` pour les minutes et `s` pour les secondes."
                     )
                 ]
             });
@@ -138,7 +140,11 @@ export const command: CommandDatas = {
 
         if (durationMs > 7 * 24 * 60 * 60 * 1000) {
             await interaction.editReply({
-                embeds: [errorEmbed.setDescription("Durée invalide. La durée totale ne peut pas excéder 7 jours.")]
+                embeds: [
+                    errorEmbed.setDescription(
+                        "<:9692redguard:1274033795615424582> Durée invalide. La durée totale ne peut pas excéder 7 jours."
+                    )
+                ]
             });
             return;
         }
@@ -148,14 +154,16 @@ export const command: CommandDatas = {
             await interaction.editReply({
                 embeds: [
                     embed.setDescription(
-                        `L'utilisateur ${targetMember.user} a été exlcu pour ${humanizeTime(durationMs, "ms", lang)}. \n**Raison**: ${reason}`
+                        `<:icons_timeout:1271775567074824232> L'utilisateur ${targetMember.user} a été exlcu pour ${humanizeTime(durationMs, "ms", lang)}. \n<:6442nanewsicon:1271775861938327592> **Raison**: ${reason}`
                     )
                 ]
             });
         } catch {
             await interaction.editReply({
                 embeds: [
-                    errorEmbed.setDescription("Une erreur s'est produite lors d'exclusion temporaire de l'utilisateur.")
+                    errorEmbed.setDescription(
+                        "<:9692redguard:1274033795615424582> Une erreur s'est produite lors d'exclusion temporaire de l'utilisateur."
+                    )
                 ]
             });
         }

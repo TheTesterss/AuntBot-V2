@@ -69,13 +69,13 @@ export const command: CommandDatas = {
     // #endregion datas
     execute: async (
         bot: Bot,
-        database: Database,
+        _database: Database,
         interaction:
             | ChatInputCommandInteraction
             | UserContextMenuCommandInteraction
             | MessageContextMenuCommandInteraction,
-        command: CommandDatas,
-        lang: LangValues
+        _command: CommandDatas,
+        _lang: LangValues
     ): Promise<void> => {
         interaction = interaction as ChatInputCommandInteraction;
         const errorEmbed = new EmbedBuilder().setTitle("Erreur").setColor(bot.colors.false as ColorResolvable);
@@ -131,7 +131,11 @@ export const command: CommandDatas = {
         if (collectedMessages.length === 0) {
             await interaction.editReply({
                 content: "",
-                embeds: [errorEmbed.setDescription("Aucun message correspondant à ces paramètres trouvé.")]
+                embeds: [
+                    errorEmbed.setDescription(
+                        "<:9692redguard:1274033795615424582> Aucun message correspondant à ces paramètres trouvé."
+                    )
+                ]
             });
             return;
         }
@@ -141,7 +145,11 @@ export const command: CommandDatas = {
         if (!interaction.channel || !interaction.channel.isTextBased() || interaction.channel.type === ChannelType.DM) {
             await interaction.editReply({
                 content: "",
-                embeds: [errorEmbed.setDescription("Cette commande ne peut pas être utilisée dans ce type de salon.")]
+                embeds: [
+                    errorEmbed.setDescription(
+                        "<:9692redguard:1274033795615424582> Cette commande ne peut pas être utilisée dans ce type de salon."
+                    )
+                ]
             });
             return;
         }
@@ -152,7 +160,11 @@ export const command: CommandDatas = {
         } catch {
             await interaction.editReply({
                 content: "",
-                embeds: [errorEmbed.setDescription("Une erreur s'est produite lors de la suppression des messages.")]
+                embeds: [
+                    errorEmbed.setDescription(
+                        "<:9692redguard:1274033795615424582> Une erreur s'est produite lors de la suppression des messages."
+                    )
+                ]
             });
             return;
         }
@@ -160,14 +172,16 @@ export const command: CommandDatas = {
         if (size === number) {
             await interaction.editReply({
                 content: "",
-                embeds: [embed.setDescription(`J'ai bien supprimé ${number} messages.`)]
+                embeds: [
+                    embed.setDescription(`<:8181greendot:1274033444006920272> J'ai bien supprimé ${number} messages.`)
+                ]
             });
         } else {
             await interaction.editReply({
                 content: "",
                 embeds: [
                     embed.setDescription(
-                        `Je n'ai pas pu supprimer autant de messages, seulement ${size} message${
+                        `<:3100yellowdot:1274033394430377985> Je n'ai pas pu supprimer autant de messages, seulement ${size} message${
                             size > 1
                                 ? "s ont pu être effacés car ils correspondaient aux critères et dataient de moins de 2 semaines"
                                 : " a pu être effacé car il correspondait aux critères et datait de moins de 2 semaines"

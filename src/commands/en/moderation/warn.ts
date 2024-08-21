@@ -91,28 +91,33 @@ export const command: CommandDatas = {
             | ChatInputCommandInteraction
             | UserContextMenuCommandInteraction
             | MessageContextMenuCommandInteraction,
-        command: CommandDatas,
+        _command: CommandDatas,
         lang: LangValues
     ): Promise<void> => {
         interaction = interaction as ChatInputCommandInteraction;
+        if (!interaction.guild) return;
+
+        const errorEmbed = new EmbedBuilder().setTitle("Error").setColor(bot.colors.false as ColorResolvable);
+        const embed = new EmbedBuilder().setColor(bot.colors.true as ColorResolvable).setFooter({
+            iconURL: interaction.client.user.avatarURL() ?? undefined,
+            text: "Powered by Aunt Development"
+        });
 
         const targetUser = interaction.options.getUser("user", true);
         const targetId = targetUser.id;
-        const reason = interaction.options.getString("reason", false) || "Pas de raison spécifiée.";
+        const reason = interaction.options.getString("reason", false) || "No reason specified.";
         const notify = interaction.options.getString("notify", false) || "yes_with_reason";
-
-        const errorEmbed = new EmbedBuilder().setTitle("Erreur").setColor(bot.colors.false as ColorResolvable);
 
         if (targetUser.id === interaction.user.id) {
             await interaction.editReply({
-                embeds: [errorEmbed.setDescription("Vous ne pouvez pas vous avertir vous-même.")]
+                embeds: [errorEmbed.setDescription("<:9692redguard:1274033795615424582> You cannot warn yourself.")]
             });
             return;
         }
 
         if (targetUser.bot) {
             await interaction.editReply({
-                embeds: [errorEmbed.setDescription("Vous ne pouvez pas avertir un bot.")]
+                embeds: [errorEmbed.setDescription("<:9692redguard:1274033795615424582> You cannot warn a bot.")]
             });
             return;
         }
@@ -124,7 +129,9 @@ export const command: CommandDatas = {
         if (!targetMember) {
             await interaction.editReply({
                 embeds: [
-                    errorEmbed.setDescription("Vous ne pouvez pas avertir une personne qui n'est pas sur le serveur.")
+                    errorEmbed.setDescription(
+                        "<:9692redguard:1274033795615424582> You cannot warn a user who is not on the server."
+                    )
                 ]
             });
             return;
@@ -135,7 +142,7 @@ export const command: CommandDatas = {
 
         if (targetUserRolePosition >= requestUserRolePosition) {
             errorEmbed.setDescription(
-                "Vous ne pouvez pas avertir ce membre car il a le même plus haut rôle que vous voire un rôle au dessus."
+                "<:9692redguard:1274033795615424582> You cannot warn this member because they have the same highest role or a higher role than you."
             );
 
             await interaction.editReply({ embeds: [errorEmbed] });
@@ -147,7 +154,11 @@ export const command: CommandDatas = {
 
         if (!thisGuildDb) {
             await interaction.editReply({
-                embeds: [errorEmbed.setDescription("Une erreur s'est produite avec la base de données.")]
+                embeds: [
+                    errorEmbed.setDescription(
+                        "<:9692redguard:1274033795615424582> An error occurred with the database."
+                    )
+                ]
             });
             return;
         }
@@ -175,11 +186,11 @@ export const command: CommandDatas = {
                 try {
                     await targetMember.timeout(
                         action.duration as number,
-                        `A eu un total de ${targetWarns.length} avertissement${targetWarns.length > 1 ? "s" : ""}. Voir sanction #${thisGuildDb.mod.totalWarns}.`
+                        `Has received a total of ${targetWarns.length} warning${targetWarns.length > 1 ? "s" : ""}. See sanction #${thisGuildDb.mod.totalWarns}.`
                     );
-                    message = `> Le membre a bien été exclu temporairement pendant ${humanizeTime(action.duration as number, "ms", lang)}.`;
+                    message = `> <:icons_timeout:1271775567074824232> The member has been successfully timed out for ${humanizeTime(action.duration as number, "ms", lang)}.`;
                 } catch {
-                    message = "> Je n'ai pas pu exclure temporairement ce membre.";
+                    message = "> <:1523reddot:1274033425292066816> I couldn't timeout this member.";
                 }
             } else if (action.actionType === "tempban") {
                 const banned = await tempBan(
@@ -187,40 +198,35 @@ export const command: CommandDatas = {
                     interaction.guild as Guild,
                     targetId,
                     Date.now() + (action.duration as number),
-                    `A eu un total de ${targetWarns.length} avertissement${targetWarns.length > 1 ? "s" : ""}. Voir sanction #${thisGuildDb.mod.totalWarns}.`,
+                    `Has received a total of ${targetWarns.length} warning${targetWarns.length > 1 ? "s" : ""}. See sanction #${thisGuildDb.mod.totalWarns}.`,
                     7 * 24 * 60 * 60
                 );
                 message = banned
-                    ? `> Le membre a bien été banni temporairement pendant ${humanizeTime(action.duration as number, "ms", lang)}`
-                    : "> Je n'ai pas pu bannir temporairement ce membre.";
+                    ? `> <:icons_ban:1275820197370138765> The member has been successfully temp-banned for ${humanizeTime(action.duration as number, "ms", lang)}`
+                    : "> <:1523reddot:1274033425292066816> I couldn't temp-ban this member.";
             } else if (action.actionType === "permban") {
                 try {
                     await targetMember.ban({
-                        reason: `A eu un total de ${targetWarns.length} avertissement${targetWarns.length > 1 ? "s" : ""}. Voir sanction #${thisGuildDb.mod.totalWarns}.`,
+                        reason: `Has received a total of ${targetWarns.length} warning${targetWarns.length > 1 ? "s" : ""}. See sanction #${thisGuildDb.mod.totalWarns}.`,
                         deleteMessageSeconds: 7 * 24 * 60 * 60
                     });
-                    message = "> Le membre a bien été banni définitivement.";
+                    message = "> <:icons_ban:1275820197370138765> The member has been successfully permanently banned.";
                 } catch {
-                    message = "> Je n'ai pas pu bannir définitivement le membre.";
+                    message = "> <:1523reddot:1274033425292066816> I couldn't permanently ban the member.";
                 }
             }
         }
 
-        let embed = new EmbedBuilder().setColor(bot.colors.true as ColorResolvable).setFooter({
-            iconURL: interaction.client.user.avatarURL() ?? undefined,
-            text: "Alimenté par Aunt Développement"
-        });
-
         let sent = true;
         if (notify !== "no") {
             let embedNotif = embed
-                .setTitle("Nouvel avertissement")
+                .setTitle("New Warning")
                 .setDescription(
-                    `Vous venez d'être averti du serveur ${interaction.guild?.name} :\n> **Modérateur :** ${interaction.user.displayName} (\`${interaction.user.id}\`)`
+                    `<:icons_dred:1271775677472968746> You have been warned in the server ${interaction.guild?.name}:\n> <:9829namodicon:1271775961272029206> **Moderator:** ${interaction.user.displayName} (\`${interaction.user.id}\`)`
                 );
 
             if (notify === "yes_with_reason") {
-                embedNotif.data.description += `\n > **Raison :** ${reason}`;
+                embedNotif.data.description += `\n > <:6442nanewsicon:1271775861938327592> **Reason:** ${reason}`;
             }
 
             try {
@@ -231,9 +237,9 @@ export const command: CommandDatas = {
         }
 
         embed
-            .setTitle(`Avertissement donné !`)
+            .setTitle(`Warning Issued!`)
             .setDescription(
-                `Le membre ${targetUser} (\`${targetUser?.id}\`) a bien reçu un nouvel avertissement ! ${notify === "no" ? "Comme demandé, il n'a pas été prévenu." : sent ? "Il a bien été averti." : "Je n'ai pas pu l'avertir (ses DMs sont désactivés)."}\nIl a désormais ${targetWarns.length} avertissement${targetWarns.length > 1 ? "s" : ""}.\n\nRaison :\n> ${reason}\n\nSanction :\n${message ? message : `> Aucune sanction pour ${targetWarns.length} avertissement${targetWarns.length > 1 ? "s" : ""}.`}`
+                `<:8181greendot:1274033444006920272> The member ${targetUser} (\`${targetUser?.id}\`) has received a new warning! ${notify === "no" ? "As requested, they were not notified." : sent ? "They have been notified." : "I couldn't notify them (their DMs are disabled)."}\nThey now have ${targetWarns.length} warning${targetWarns.length > 1 ? "s" : ""}.\n\n<:6442nanewsicon:1271775861938327592> Reason:\n> ${reason}\n\n<:4249dndbadge:1274036708676997132> Sanction:\n${message ? message : `> No sanction for ${targetWarns.length} warning${targetWarns.length > 1 ? "s" : ""}.`}`
             );
 
         await interaction.editReply({ embeds: [embed] });

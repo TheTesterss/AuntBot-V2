@@ -98,7 +98,11 @@ export const command: CommandDatas = {
 
         if (!channel?.isTextBased() || channel.isDMBased()) {
             await interaction.editReply({
-                embeds: [errorEmbed.setDescription("Cette commande ne peut pas être utilisée dans ce salon.")]
+                embeds: [
+                    errorEmbed.setDescription(
+                        "<:9692redguard:1274033795615424582> Cette commande ne peut pas être utilisée dans ce salon."
+                    )
+                ]
             });
             return;
         }
@@ -114,7 +118,11 @@ export const command: CommandDatas = {
             const firstMessage = await channel.messages.fetch(firstMessageId);
             if (!firstMessage) {
                 await interaction.editReply({
-                    embeds: [errorEmbed.setDescription("Le premier message spécifié est introuvable dans ce canal.")]
+                    embeds: [
+                        errorEmbed.setDescription(
+                            "<:9692redguard:1274033795615424582> Le premier message spécifié est introuvable dans ce canal."
+                        )
+                    ]
                 });
                 return;
             }
@@ -125,7 +133,9 @@ export const command: CommandDatas = {
                 if (!lastMessage) {
                     await interaction.editReply({
                         embeds: [
-                            errorEmbed.setDescription("Le dernier message spécifié est introuvable dans ce canal.")
+                            errorEmbed.setDescription(
+                                "<:9692redguard:1274033795615424582> Le dernier message spécifié est introuvable dans ce canal."
+                            )
                         ]
                     });
                     return;
@@ -138,7 +148,7 @@ export const command: CommandDatas = {
                 await interaction.editReply({
                     embeds: [
                         errorEmbed.setDescription(
-                            "Le premier message ne peut pas être plus récent que le dernier message."
+                            "<:9692redguard:1274033795615424582> Le premier message ne peut pas être plus récent que le dernier message."
                         )
                     ]
                 });
@@ -150,7 +160,7 @@ export const command: CommandDatas = {
                 await interaction.editReply({
                     embeds: [
                         errorEmbed.setDescription(
-                            "Le dernier message spécifié date de plus de 2 semaines et ne peut pas être supprimé."
+                            "<:9692redguard:1274033795615424582> Le dernier message spécifié date de plus de 2 semaines et ne peut pas être supprimé."
                         )
                     ]
                 });
@@ -196,15 +206,19 @@ export const command: CommandDatas = {
             const totalToDelete = filteredMessages.length;
             const description =
                 totalDeleted === totalToDelete
-                    ? `La conversation (de ${totalDeleted} messages) a été effacée avec succès.`
-                    : `La conversation a été partiellement effacée. ${totalDeleted}/${totalToDelete} messages ont été supprimés. Les autres messages n'ont pas pu être effacés car ils datent de plus de 2 semaines.`;
+                    ? `<:8181greendot:1274033444006920272> La conversation (de ${totalDeleted} messages) a été effacée avec succès.`
+                    : `<:3100yellowdot:1274033394430377985> La conversation a été partiellement effacée. ${totalDeleted}/${totalToDelete} messages ont été supprimés. Les autres messages n'ont pas pu être effacés car ils datent de plus de 2 semaines.`;
 
             await interaction.editReply({
                 embeds: [embed.setDescription(description)]
             });
         } catch {
             await interaction.editReply({
-                embeds: [errorEmbed.setDescription("Une erreur s'est produite lors de la suppression des messages.")]
+                embeds: [
+                    errorEmbed.setDescription(
+                        "<:9692redguard:1274033795615424582> Une erreur s'est produite lors de la suppression des messages."
+                    )
+                ]
             });
         }
     }

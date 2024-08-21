@@ -228,7 +228,11 @@ export const command: CommandDatas = {
 
         if (!thisGuildDb) {
             await interaction.editReply({
-                embeds: [errorEmbed.setDescription("Une erreur s'est produite avec la base de données.")]
+                embeds: [
+                    errorEmbed.setDescription(
+                        "<:9692redguard:1274033795615424582> Une erreur s'est produite avec la base de données."
+                    )
+                ]
             });
             return;
         }
@@ -253,7 +257,11 @@ export const command: CommandDatas = {
             if (type !== "permban") {
                 if (!duration) {
                     await interaction.editReply({
-                        embeds: [errorEmbed.setDescription("Vous devez spécifier une durée pour ce type d'action.")]
+                        embeds: [
+                            errorEmbed.setDescription(
+                                "<:9692redguard:1274033795615424582> Vous devez spécifier une durée pour ce type d'action."
+                            )
+                        ]
                     });
                     return;
                 } else {
@@ -263,7 +271,7 @@ export const command: CommandDatas = {
                         await interaction.editReply({
                             embeds: [
                                 errorEmbed.setDescription(
-                                    "La durée spécifiée n'est pas valide. Vous pouvez utiliser `y` pour les ans, `mon` pour les mois, `w` pour les semaines, `d` pour les jours, `h` pour les heures, `min` pour les minutes."
+                                    "<:9692redguard:1274033795615424582> La durée spécifiée n'est pas valide. Vous pouvez utiliser `y` pour les ans, `mon` pour les mois, `w` pour les semaines, `d` pour les jours, `h` pour les heures, `min` pour les minutes."
                                 )
                             ]
                         });
@@ -282,22 +290,26 @@ export const command: CommandDatas = {
 
                 if (type === "permban") {
                     embed.setDescription(
-                        `C'est noté ! Je bannirai définitivement les utilisateurs au bout de ${number} avertissement${number > 1 ? "s" : ""}.`
+                        `<:8181greendot:1274033444006920272> C'est noté ! Je bannirai définitivement les utilisateurs au bout de ${number} avertissement${number > 1 ? "s" : ""}.`
                     );
                 } else if (type === "tempban") {
                     embed.setDescription(
-                        `C'est noté ! Je bannirai pendant ${humanizedTime} les utilisateurs au bout de ${number} avertissement${number > 1 ? "s" : ""}`
+                        `<:8181greendot:1274033444006920272> C'est noté ! Je bannirai pendant ${humanizedTime} les utilisateurs au bout de ${number} avertissement${number > 1 ? "s" : ""}`
                     );
                 } else if (type === "timeout") {
                     embed.setDescription(
-                        `C'est noté ! Je mettrai en sourdine pendant ${humanizedTime} les utilisateurs au bout de ${number} avertissement${number > 1 ? "s" : ""}`
+                        `<:8181greendot:1274033444006920272> C'est noté ! Je mettrai en sourdine pendant ${humanizedTime} les utilisateurs au bout de ${number} avertissement${number > 1 ? "s" : ""}`
                     );
                 }
 
                 await interaction.editReply({ embeds: [embed] });
             } else {
                 await interaction.editReply({
-                    embeds: [errorEmbed.setDescription("Une action existe déjà pour ce nombre d'avertissements.")]
+                    embeds: [
+                        errorEmbed.setDescription(
+                            "<:9692redguard:1274033795615424582> Une action existe déjà pour ce nombre d'avertissements."
+                        )
+                    ]
                 });
             }
         }
@@ -310,34 +322,44 @@ export const command: CommandDatas = {
 
             if (!exists) {
                 await interaction.editReply({
-                    embeds: [errorEmbed.setDescription("Aucune action pour ce nombre d'avertissements existe.")]
+                    embeds: [
+                        errorEmbed.setDescription(
+                            "<:9692redguard:1274033795615424582> Aucune action pour ce nombre d'avertissements existe."
+                        )
+                    ]
                 });
                 return;
             }
 
             await GuildDB.updateOne({ id: guildId }, { $pull: { "mod.warnActions": { warns: number } } });
 
-            await interaction.editReply({ embeds: [embed.setDescription("J'ai bien supprimé cette action !")] });
+            await interaction.editReply({
+                embeds: [embed.setDescription("<:8181greendot:1274033444006920272> J'ai bien supprimé cette action !")]
+            });
         }
         // #endregion actions delete
         // #region actions view
         else if (fullCommandName === "actions view") {
             if (thisGuildDb.mod.warnActions.length === 0) {
                 await interaction.editReply({
-                    embeds: [embed.setDescription("Aucune action d'avertissement n'est enregistrée sur ce serveur.")]
+                    embeds: [
+                        embed.setDescription(
+                            "<:2054orangedot:1274033354131640391> Aucune action d'avertissement n'est enregistrée sur ce serveur."
+                        )
+                    ]
                 });
                 return;
             }
 
-            const actions = [];
+            const actions: string[] = [];
             for (const action of thisGuildDb.mod.warnActions) {
                 let actionDescription: string;
                 if (action.actionType === "permban") {
-                    actionDescription = "Bannir définitivement";
+                    actionDescription = "<:icons_ban:1275820197370138765> Bannir définitivement";
                 } else if (action.actionType === "tempban") {
-                    actionDescription = `Bannir pendant ${humanizeTime(action.duration as number, "ms", lang)}`;
+                    actionDescription = `<:icons_ban:1275820197370138765> Bannir pendant ${humanizeTime(action.duration as number, "ms", lang)}`;
                 } else if (action.actionType === "timeout") {
-                    actionDescription = `Exclure (Timeout) pendant ${humanizeTime(action.duration as number, "ms", lang)}`;
+                    actionDescription = `<:icons_timeout:1271775567074824232> Exclure (Timeout) pendant ${humanizeTime(action.duration as number, "ms", lang)}`;
                 } else {
                     actionDescription = "Action inconnue";
                 }
@@ -366,7 +388,9 @@ export const command: CommandDatas = {
             if (thisGuildDb.mod.warnActions.length === 0) {
                 await interaction.editReply({
                     embeds: [
-                        errorEmbed.setDescription("Il n'y a aucun action d'avertissement à supprimer sur ce serveur.")
+                        errorEmbed.setDescription(
+                            "<:9692redguard:1274033795615424582> Il n'y a aucun action d'avertissement à supprimer sur ce serveur."
+                        )
                     ]
                 });
                 return;
@@ -404,14 +428,16 @@ export const command: CommandDatas = {
                     await i.update({
                         embeds: [
                             embed
-                                .setDescription("J'ai bien supprimé toutes les actions d'avertissement de ce serveur !")
+                                .setDescription(
+                                    "<:8181greendot:1274033444006920272> J'ai bien supprimé toutes les actions d'avertissement de ce serveur !"
+                                )
                                 .setTitle("Actions d'avertissement purgées !")
                         ],
                         components: []
                     });
                 } else if (i.customId === "cancelwarnsactions") {
                     await i.update({
-                        content: "Action annulée.",
+                        content: "<:2054orangedot:1274033354131640391> Action annulée.",
                         components: [
                             new ActionRowBuilder<ButtonBuilder>().addComponents(
                                 actionRow.components.map((button) => ButtonBuilder.from(button).setDisabled(true))
@@ -424,7 +450,7 @@ export const command: CommandDatas = {
             collector.on("end", async (collected) => {
                 if (collected.some((x) => x.user.id === interaction.user.id)) return;
                 await interaction.editReply({
-                    content: "Temps écoulé.",
+                    content: "<:1523reddot:1274033425292066816> Temps écoulé.",
                     components: [
                         new ActionRowBuilder<ButtonBuilder>().addComponents(
                             actionRow.components.map((button) => ButtonBuilder.from(button).setDisabled(true))
@@ -443,7 +469,11 @@ export const command: CommandDatas = {
 
             if (!warnDetails) {
                 await interaction.editReply({
-                    embeds: [errorEmbed.setDescription("Aucun avertissement avec cet ID trouvé.")]
+                    embeds: [
+                        errorEmbed.setDescription(
+                            "<:9692redguard:1274033795615424582> Aucun avertissement avec cet ID trouvé."
+                        )
+                    ]
                 });
                 return;
             }
@@ -461,7 +491,7 @@ export const command: CommandDatas = {
                 embeds: [
                     embed
                         .setDescription(
-                            `J'ai bien supprimé cet avertissement :\n> - **ID cible :** \`${warnDetails.target}\`\n> - **ID modérateur :** \`${warnDetails.mod}\`\n> - **Raison :** ${warnDetails.reason}\n- **Date :** <t:${Math.round(warnDetails.date / 1000)}:F>\n\n-# En cas d'erreur, vous avez 30 secondes pour cliquer sur le bouton "Annuler" afin de remettre l'avertissement.`
+                            `J'ai bien supprimé cet avertissement :\n> - <:9732memberblue:1274037205408681995> **ID cible :** \`${warnDetails.target}\`\n> - <:9829namodicon:1271775961272029206> **ID modérateur :** \`${warnDetails.mod}\`\n> - <:6442nanewsicon:1271775861938327592> **Raison :** ${warnDetails.reason}\n- <:8045slowmode:1275825495103111301> **Date :** <t:${Math.round(warnDetails.date / 1000)}:F>\n\n-# En cas d'erreur, vous avez 30 secondes pour cliquer sur le bouton "Annuler" afin de remettre l'avertissement.`
                         )
                         .setTitle(`Avertissement #${warnDetails.id} supprimé !`)
                 ],
@@ -473,7 +503,11 @@ export const command: CommandDatas = {
             collector.on("collect", async (i) => {
                 if (i.customId !== "cancelwarnremove" || i.user.id !== interaction.user.id) {
                     await i.reply({
-                        embeds: [errorEmbed.setDescription("Ce n'est pas votre bouton ou action invalide.")],
+                        embeds: [
+                            errorEmbed.setDescription(
+                                "<:9692redguard:1274033795615424582> Ce n'est pas votre bouton ou action invalide."
+                            )
+                        ],
                         ephemeral: true
                     });
                     return;
@@ -484,7 +518,9 @@ export const command: CommandDatas = {
                 await i.update({
                     embeds: [
                         embed
-                            .setDescription("J'ai bien annulé la suppression de cet avertissement !")
+                            .setDescription(
+                                "<:8181greendot:1274033444006920272> J'ai bien annulé la suppression de cet avertissement !"
+                            )
                             .setTitle("Annulation de la suppression")
                     ],
                     components: []
@@ -544,7 +580,7 @@ export const command: CommandDatas = {
                     await interaction.editReply({
                         embeds: [
                             errorEmbed.setDescription(
-                                `L'utilisateur mentionné (${targetUser}) n'a aucun avertissement.`
+                                `<:9692redguard:1274033795615424582> L'utilisateur mentionné (${targetUser}) n'a aucun avertissement.`
                             )
                         ]
                     });
@@ -576,7 +612,9 @@ export const command: CommandDatas = {
 
                 if (i.user.id !== userId) {
                     await i.reply({
-                        embeds: [errorEmbed.setDescription("Ce n'est pas votre bouton.")],
+                        embeds: [
+                            errorEmbed.setDescription("<:9692redguard:1274033795615424582> Ce n'est pas votre bouton.")
+                        ],
                         ephemeral: true
                     });
                     return;
@@ -588,7 +626,9 @@ export const command: CommandDatas = {
                         await i.update({
                             embeds: [
                                 embed
-                                    .setDescription(`J'ai bien supprimé tous les avertissements du serveur !`)
+                                    .setDescription(
+                                        `<:8181greendot:1274033444006920272> J'ai bien supprimé tous les avertissements du serveur !`
+                                    )
                                     .setTitle("Avertissements purgés !")
                             ],
                             components: []
@@ -604,7 +644,7 @@ export const command: CommandDatas = {
                             embeds: [
                                 embed
                                     .setDescription(
-                                        `J'ai bien supprimé tous les avertissements de <@${targetUser.id}>.`
+                                        `<:8181greendot:1274033444006920272> J'ai bien supprimé tous les avertissements de <@${targetUser.id}>.`
                                     )
                                     .setTitle("Avertissements d'un utilisateur purgés !")
                             ],
@@ -682,7 +722,7 @@ export const command: CommandDatas = {
                         embed
                             .setTitle(`Avertissements ${targetUser ? `de ${targetUser.displayName}` : "globaux"}`)
                             .setDescription(
-                                `> **ID de l'avertissement :** ${warns[i].id}\n> **Date :** <t:${Math.round(warns[i].date / 1000)}:F>\n> **Modérateur :** <@${warns[i].mod}> (\`${warns[i].mod}\`)\n> **Raison :** ${warns[i].reason}`
+                                `> <:9659nachessicon:1271775948852957276> **ID de l'avertissement :** ${warns[i].id}\n> <:8045slowmode:1275825495103111301> **Date :** <t:${Math.round(warns[i].date / 1000)}:F>\n> <:9829namodicon:1271775961272029206> **Modérateur :** <@${warns[i].mod}> (\`${warns[i].mod}\`)\n> <:6442nanewsicon:1271775861938327592> **Raison :** ${warns[i].reason}`
                             )
                     ],
                     components: warns.length === 1 ? [] : [updateButtons()]
@@ -694,7 +734,7 @@ export const command: CommandDatas = {
                     embed
                         .setTitle(`Avertissements ${targetUser ? `de ${targetUser.displayName}` : "globaux"}`)
                         .setDescription(
-                            `> **ID de l'avertissement :** ${warns[i].id}\n> **Date :** <t:${Math.round(warns[i].date / 1000)}:F>\n> **Modérateur :** <@${warns[i].mod}> (\`${warns[i].mod}\`)\n> **Raison :** ${warns[i].reason}`
+                            `> <:9659nachessicon:1271775948852957276> **ID de l'avertissement :** ${warns[i].id}\n> <:8045slowmode:1275825495103111301> **Date :** <t:${Math.round(warns[i].date / 1000)}:F>\n> <:9829namodicon:1271775961272029206> **Modérateur :** <@${warns[i].mod}> (\`${warns[i].mod}\`)\n> <:6442nanewsicon:1271775861938327592> **Raison :** ${warns[i].reason}`
                         )
                 ],
                 components: warns.length === 1 ? [] : [updateButtons()]
@@ -707,7 +747,9 @@ export const command: CommandDatas = {
 
                 if (btnInteraction.user.id !== userId) {
                     await btnInteraction.reply({
-                        embeds: [errorEmbed.setDescription("Ce n'est pas votre bouton.")],
+                        embeds: [
+                            errorEmbed.setDescription("<:9692redguard:1274033795615424582> Ce n'est pas votre bouton.")
+                        ],
                         ephemeral: true
                     });
                     return;
@@ -732,7 +774,11 @@ export const command: CommandDatas = {
 
                         if (isNaN(pageNumber) || pageNumber < 1 || pageNumber > warns.length) {
                             await modalInteraction.reply({
-                                embeds: [errorEmbed.setDescription("Numéro de page invalide.")],
+                                embeds: [
+                                    errorEmbed.setDescription(
+                                        "<:9692redguard:1274033795615424582> Numéro de page invalide."
+                                    )
+                                ],
                                 ephemeral: true
                             });
                             return;
@@ -742,7 +788,7 @@ export const command: CommandDatas = {
                         await updateMessage(modalInteraction);
                     } catch {
                         await btnInteraction.followUp({
-                            embeds: [errorEmbed.setDescription("Temps écoulé.")],
+                            embeds: [errorEmbed.setDescription("<:9692redguard:1274033795615424582> Temps écoulé.")],
                             ephemeral: true
                         });
                     }

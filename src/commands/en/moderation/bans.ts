@@ -84,15 +84,19 @@ export const command: CommandDatas = {
     ): Promise<void> => {
         interaction = interaction as ChatInputCommandInteraction;
 
-        const errorEmbed = new EmbedBuilder().setTitle("Erreur").setColor(bot.colors.false as ColorResolvable);
+        const errorEmbed = new EmbedBuilder().setTitle("Error").setColor(bot.colors.false as ColorResolvable);
         const embed = new EmbedBuilder().setColor(bot.colors.true as ColorResolvable).setFooter({
             iconURL: interaction.client.user.avatarURL() ?? undefined,
-            text: "Alimenté par Aunt Développement"
+            text: "Powered by Aunt Development"
         });
 
         if (!interaction.guild) {
             await interaction.editReply({
-                embeds: [errorEmbed.setDescription("Cette commande ne peut qu'être faite sur un serveur.")]
+                embeds: [
+                    errorEmbed.setDescription(
+                        "<:9692redguard:1274033795615424582> This command can only be executed on a server."
+                    )
+                ]
             });
             return;
         }
@@ -101,7 +105,7 @@ export const command: CommandDatas = {
         let bans = Array.from(fetchedBans.values());
 
         if (bans.length === 0) {
-            await interaction.editReply({ embeds: [embed.setDescription("Aucun bannissement à afficher.")] });
+            await interaction.editReply({ embeds: [embed.setDescription("No bans to display.")] });
             return;
         }
 
@@ -120,7 +124,11 @@ export const command: CommandDatas = {
 
             if (i === -1) {
                 await interaction.editReply({
-                    embeds: [errorEmbed.setDescription("Aucune personne bannie trouvée avec cet ID.")]
+                    embeds: [
+                        errorEmbed.setDescription(
+                            "<:9692redguard:1274033795615424582> No banned person found with this ID."
+                        )
+                    ]
                 });
                 return;
             }
@@ -149,9 +157,9 @@ export const command: CommandDatas = {
             await interactionToUpdate.update({
                 embeds: [
                     embed
-                        .setTitle(`Bannissements du serveur`)
+                        .setTitle(`Server Bans`)
                         .setDescription(
-                            `> **Utilisateur banni :** ${bans[i].user.displayName} (\`${bans[i].user.id}\`)\n> **Modérateur :** ${dbInfos ? `<@${dbInfos.mod}> (\`${dbInfos.mod}\`)` : "Modérateur inconnu."}\n> **Raison :** ${bans[i].reason}\n> **Date :** ${dbInfos ? `<t:${Math.round(dbInfos.date / 1000)}:F>` : "Date inconnue."}\n> **Bannissement temporaire :** ${dbInfos?.endDate ? `Oui (expire <t:${Math.round(dbInfos.endDate / 1000)}:R>.)` : "Non."}`
+                            `> <:icons_ban:1275820197370138765> **Banned User:** ${bans[i].user.displayName} (\`${bans[i].user.id}\`)\n> <:9829namodicon:1271775961272029206> **Moderator:** ${dbInfos ? `<@${dbInfos.mod}> (\`${dbInfos.mod}\`)` : "Unknown moderator."}\n> <:6442nanewsicon:1271775861938327592> **Reason:** ${bans[i].reason}\n> <:8045slowmode:1275825495103111301> **Date:** ${dbInfos ? `<t:${Math.round(dbInfos.date / 1000)}:F>` : "Unknown date."}\n> <:icons_timeout:1271775567074824232> **Temporary Ban:** ${dbInfos?.endDate ? `Yes (expires <t:${Math.round(dbInfos.endDate / 1000)}:R>).` : "No."}`
                         )
                 ],
                 components: bans.length === 1 ? [] : [updateButtons()]
@@ -162,9 +170,9 @@ export const command: CommandDatas = {
         let message = await interaction.editReply({
             embeds: [
                 embed
-                    .setTitle(`Bannissements du serveur`)
+                    .setTitle(`Server Bans`)
                     .setDescription(
-                        `> **Utilisateur banni :** ${bans[i].user.displayName} (\`${bans[i].user.id}\`)\n> **Modérateur :** ${dbInfos ? `<@${dbInfos.mod}> (\`${dbInfos.mod}\`)` : "Modérateur inconnu."}\n> **Raison :** ${bans[i].reason}\n> **Date :** ${dbInfos ? `<t:${Math.round(dbInfos.date / 1000)}:F>` : "Date inconnue."}\n> **Bannissement temporaire :** ${dbInfos?.endDate ? `Oui (expire <t:${Math.round(dbInfos.endDate / 1000)}:R>.)` : "Non."}`
+                        `> <:icons_ban:1275820197370138765> **Banned User:** ${bans[i].user.displayName} (\`${bans[i].user.id}\`)\n> <:9829namodicon:1271775961272029206> **Moderator:** ${dbInfos ? `<@${dbInfos.mod}> (\`${dbInfos.mod}\`)` : "Unknown moderator."}\n> <:6442nanewsicon:1271775861938327592> **Reason:** ${bans[i].reason}\n> <:8045slowmode:1275825495103111301> **Date:** ${dbInfos ? `<t:${Math.round(dbInfos.date / 1000)}:F>` : "Unknown date."}\n> <:icons_timeout:1271775567074824232> **Temporary Ban:** ${dbInfos?.endDate ? `Yes (expires <t:${Math.round(dbInfos.endDate / 1000)}:R>).` : "No."}`
                     )
             ],
             components: bans.length === 1 ? [] : [updateButtons()]
@@ -177,20 +185,20 @@ export const command: CommandDatas = {
 
             if (btnInteraction.user.id !== interaction.user.id) {
                 await btnInteraction.reply({
-                    embeds: [errorEmbed.setDescription("Ce n'est pas votre bouton.")],
+                    embeds: [errorEmbed.setDescription("<:9692redguard:1274033795615424582> This is not your button.")],
                     ephemeral: true
                 });
                 return;
             }
 
             if (btn === "page") {
-                const modal = new ModalBuilder().setCustomId("page_modal").setTitle("Saisir le numéro de page");
+                const modal = new ModalBuilder().setCustomId("page_modal").setTitle("Enter Page Number");
 
                 const pageInput = new TextInputBuilder()
                     .setCustomId("page_number")
-                    .setLabel("Numéro de la page")
+                    .setLabel("Page Number")
                     .setStyle(TextInputStyle.Short)
-                    .setPlaceholder("Entrez un numéro de page...")
+                    .setPlaceholder("Enter a page number...")
                     .setRequired(true);
 
                 modal.addComponents(new ActionRowBuilder<TextInputBuilder>().addComponents(pageInput));
@@ -202,7 +210,9 @@ export const command: CommandDatas = {
 
                     if (isNaN(pageNumber) || pageNumber < 1 || pageNumber > bans.length) {
                         await modalInteraction.reply({
-                            embeds: [errorEmbed.setDescription("Numéro de page invalide.")],
+                            embeds: [
+                                errorEmbed.setDescription("<:9692redguard:1274033795615424582> Invalid page number.")
+                            ],
                             ephemeral: true
                         });
                         return;
@@ -212,7 +222,7 @@ export const command: CommandDatas = {
                     await updateMessage(modalInteraction);
                 } catch {
                     await btnInteraction.followUp({
-                        embeds: [errorEmbed.setDescription("Temps écoulé.")],
+                        embeds: [errorEmbed.setDescription("<:9692redguard:1274033795615424582> Time's up.")],
                         ephemeral: true
                     });
                 }
