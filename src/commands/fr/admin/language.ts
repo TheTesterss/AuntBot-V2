@@ -79,13 +79,12 @@ export const command: CommandDatas = {
             .setColor(bot.colors.true as ColorResolvable)
             .setFooter({
                 iconURL: interaction.client.user.avatarURL() ?? undefined,
-                text: newLang === "fr" ? "Alimenté par Aunt Développement" : "Powered by Aunt Development"
+                text: newLang === "fr" ? "Powered by Aunt Development" : "Alimenté par Aunt Développement"
             })
-            .setTitle(newLang === "fr" ? "Succès !" : "Success!")
             .setDescription(
-                newLang === "fr"
-                    ? "Je parlerai désormais français 🇫🇷 sur ce serveur !"
-                    : "From now on, I'll be speaking English 🇺🇸 on this server!"
+                newLang === "en"
+                    ? "<:1422navoteicon:1271775782426902598> From now on, I'll be speaking English 🇺🇸 on this server!"
+                    : "<:1422navoteicon:1271775782426902598> Je parlerai désormais français 🇫🇷 sur ce serveur !"
             );
 
         await interaction.editReply({ embeds: [embed] });
