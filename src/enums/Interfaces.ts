@@ -13,16 +13,18 @@ import {
     MessageContextMenuCommandInteraction,
     ModalSubmitInteraction,
     PermissionFlags,
+    PermissionResolvable,
+    PermissionsBitField,
     RoleSelectMenuInteraction,
     StringSelectMenuInteraction,
     User,
     UserContextMenuCommandInteraction,
     UserSelectMenuInteraction
-} from 'discord.js';
-import Bot from '../classes/Bot';
-import Database from '../classes/Database';
-import { ClientDB, UserDB, GuildDB, MemberDB } from '../database/index';
-import { EventType, LangValues } from './enums';
+} from "discord.js";
+import Bot from "../classes/Bot";
+import Database from "../classes/Database";
+import { ClientDB, UserDB, GuildDB, MemberDB } from "../database/index";
+import { EventType, LangValues } from "./enums";
 
 export interface EventDatas {
     name: keyof ClientEvents | keyof ClientCustomEvents | keyof MongooseEvents;
@@ -64,7 +66,7 @@ export interface CommandDatas {
             | MessageContextMenuCommandInteraction,
         command: CommandDatas,
         lang: LangValues
-    ) => {};
+    ) => Promise<void>;
 }
 
 export interface CommandDatasOption {
@@ -97,7 +99,7 @@ export interface CommandDatasOption {
 
 export interface CommandDatasOptionChoice {
     name: string;
-    value: string;
+    value: string | number;
     nameLocalizations: LocalizationMap;
 }
 
@@ -112,13 +114,8 @@ export interface commandDatasCustomOptions {
     allowInDms?: boolean;
     isNSFW?: boolean;
     ephemeralReply?: boolean;
-    memberRequiredPermissions: CommandDatasCustomPermission[];
-    clientrequiredPermissions: CommandDatasCustomPermission[];
-}
-
-export interface CommandDatasCustomPermission {
-    discordPerm: bigint;
-    AuntPermission: string;
+    memberRequiredPermissions: PermissionResolvable[];
+    clientRequiredPermissions: PermissionResolvable[];
 }
 
 export interface ClientCustomEvents {

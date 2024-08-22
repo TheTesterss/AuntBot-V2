@@ -7,28 +7,28 @@ import {
     EmbedBuilder,
     MessageContextMenuCommandInteraction,
     UserContextMenuCommandInteraction
-} from 'discord.js';
-import { CommandDatas } from '../../../enums/Interfaces';
-import Bot from '../../../classes/Bot';
-import Database from '../../../classes/Database';
-import { LangValues } from '../../../enums/enums';
-import { handleError } from '../../../utils/functions/handleErrors';
+} from "discord.js";
+import { CommandDatas } from "../../../enums/Interfaces";
+import Bot from "../../../classes/Bot";
+import Database from "../../../classes/Database";
+import { LangValues } from "../../../enums/enums";
+import { handleError } from "../../../utils/functions/handleErrors";
 
 export const command: CommandDatas = {
-    name: 'eval',
+    name: "eval",
     nameLocalizations: {
-        fr: 'eval'
+        fr: "eval"
     },
-    description: 'Execute code on discord.',
+    description: "Execute code on discord.",
     descriptionLocalizations: {
-        fr: 'Exécute un code sur discord.'
+        fr: "Exécute un code sur discord."
     },
     options: [
         {
-            name: 'content',
-            nameLocalizations: { fr: 'contenu' },
-            description: 'Content to eval.',
-            descriptionLocalizations: { fr: 'Contenu à évaluer.' },
+            name: "content",
+            nameLocalizations: { fr: "contenu" },
+            description: "Content to eval.",
+            descriptionLocalizations: { fr: "Contenu à évaluer." },
             type: ApplicationCommandOptionType.String,
             required: true
         }
@@ -44,7 +44,7 @@ export const command: CommandDatas = {
         isNSFW: false,
         whitelistDisallowed: false,
         memberRequiredPermissions: [],
-        clientrequiredPermissions: []
+        clientRequiredPermissions: []
     },
     types: [ApplicationCommandType.ChatInput],
     execute: async (
@@ -58,7 +58,7 @@ export const command: CommandDatas = {
         lang: LangValues
     ): Promise<void> => {
         try {
-            interaction.editReply({ content: eval(interaction.options.get('content')?.value as string) });
+            interaction.editReply({ content: eval(interaction.options.get("content")?.value as string) });
         } catch (e) {
             handleError(bot, interaction, e);
         }

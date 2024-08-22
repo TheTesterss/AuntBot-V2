@@ -6,10 +6,10 @@ import {
     StringSelectMenuBuilder,
     StringSelectMenuOptionBuilder,
     TextChannel
-} from 'discord.js';
-import Bot from '../classes/Bot';
-import Database from '../classes/Database';
-import { EventType } from '../enums/enums';
+} from "discord.js";
+import Bot from "../classes/Bot";
+import Database from "../classes/Database";
+import { EventType } from "../enums/enums";
 
 export = {
     name: Events.ClientReady,
@@ -19,6 +19,7 @@ export = {
         console.log(`Connexion successfully established with ${main.djsClient!.user?.username}`.bgGreen);
         database.initializateGuilds();
 
+        /*
         const embed = new EmbedBuilder()
             .setColor(main.colors.true as ColorResolvable)
             .setTitle(`Welcome on Aunt development!`)
@@ -96,6 +97,7 @@ export = {
                 )
         );
 
-        // await (main.djsClient!.channels?.cache.get("1088512857324392468") as TextChannel).send({ embeds: [embed, embed1], components: [component as ActionRowBuilder<StringSelectMenuBuilder>] });
+        await (main.djsClient!.channels?.cache.get("1088512857324392468") as TextChannel).send({ embeds: [embed, embed1], components: [component as ActionRowBuilder<StringSelectMenuBuilder>] });
+        */
     }
 };
