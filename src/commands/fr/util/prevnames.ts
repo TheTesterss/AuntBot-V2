@@ -46,8 +46,7 @@ export const command: CommandDatas = {
         isNSFW: false,
         whitelistDisallowed: false,
         memberRequiredPermissions: [],
-        clientrequiredPermissions: []
-    },
+        clientRequiredPermissions: [] },
     types: [ApplicationCommandType.ChatInput],
     execute: async (
         bot: Bot,
@@ -59,7 +58,7 @@ export const command: CommandDatas = {
         command: CommandDatas,
         lang: LangValues
     ): Promise<void> => {
-        let embed = new EmbedBuilder().setColor(bot.colors.true as ColorResolvable).setFooter({
+        let embed = new EmbedBuilder().setFooter({
             iconURL: interaction.client.user.avatarURL() ?? undefined,
             text: 'Alimenté par Aunt Développement'
         });
@@ -69,24 +68,21 @@ export const command: CommandDatas = {
         let user_db = await database.models.UserDB.findOne({id: user.id});
         if(!user_db) {
             await database.models.UserDB.create({id: user.id, prevnames: [{date: Date.now(), content: user.username}], blacklist: {isBlacklisted: false}, whitelist: {isWhitelisted: false}}).catch((_e: any) => {})
-            embed.setDescription(`Utilisateur non inclut dans la base de donnée.`)
+            embed.setColor(bot.colors.false as ColorResolvable).setDescription(`<:9692redguard:1274033795615424582>Utilisateur non inclut dans la base de donnée.`)
 
             return void interaction.editReply({embeds: [embed]})
         }
         if(sub === "reset") {
-            user_db = await database.models.UserDB.findOne({id: interaction.user.id})
-            if(!user_db) {
-                await database.models.UserDB.create({id: user.id, prevnames: [{date: Date.now(), content: user.username}], blacklist: {isBlacklisted: false}, whitelist: {isWhitelisted: false}}).catch((_e: any) => {})
-                embed.setDescription(`Utilisateur non inclut dans la base de donnée.`)
-
-                return void interaction.editReply({embeds: [embed]})
-            } else {
-                user_db?.updateOne({prevnames: [{date: Date.now(), content: user.username}]})
-                user_db?.save();
-            
-                embed.setDescription(`<:1422navoteicon:1271775782426902598> <@${interaction.user.id}> Vos anciens pseudonymes ont été réinitialisé.`)
+            try {
+                await database.models.UserDB.findOneAndUpdate({id: interaction.user.id}, { $set: { prevnames: [{date: Date.now(), content: interaction.user.username }]}})
+                embed.setColor(bot.colors.true as ColorResolvable).setDescription(`<:1422navoteicon:1271775782426902598> <@${interaction.user.id}> Vos anciens pseudonymes ont été réinitialisé.`)
 
                 return void await interaction.editReply({embeds: [embed]});
+            } catch(e) {
+                await database.models.UserDB.create({id: user.id, prevnames: [{date: Date.now(), content: user.username}], blacklist: {isBlacklisted: false}, whitelist: {isWhitelisted: false}}).catch((_e: any) => {})
+                embed.setColor(bot.colors.true as ColorResolvable).setDescription(`<:9692redguard:1274033795615424582> Cet utilisateur n'est pas inclut dans la base de donnée.`)
+
+                return void interaction.editReply({embeds: [embed]})
             }
         } else if(sub === "view") {
             let s = 0, e = 9;
@@ -108,7 +104,7 @@ export const command: CommandDatas = {
                         .setStyle(ButtonStyle.Secondary)
                     )
             }
-
+            embed.setColor(bot.colors.true as ColorResolvable)
             embed.setDescription(`<:1422navoteicon:1271775782426902598> liste des pseudonymes de <@${user.id}>. ${list?.length} entrées.`)
             embed.addFields(
                 {
@@ -117,7 +113,7 @@ export const command: CommandDatas = {
                         const date = value.date as number;
                         const content = value.content as string;
                         return `<:1814nafaceawesomeicon:1271775791981789325> <t:${Math.round(date / 1000)}:R> - \`${content}\``;
-                    }).slice(s, e).join("\n")}`,
+                    }).slice(s, e).join("\n")}.`,
                     inline: true
                 }
             );
@@ -162,7 +158,7 @@ export const command: CommandDatas = {
                                     const date = value.date as number;
                                     const content = value.content as string;
                                     return `<:1814nafaceawesomeicon:1271775791981789325> <t:${Math.round(date / 1000)}:R> - \`${content}\``;
-                                }).slice(s, e).join("\n")}`,
+                                }).slice(s, e).join("\n")}.`,
                                 inline: true
                             }
                         )
@@ -170,9 +166,11 @@ export const command: CommandDatas = {
                 })
             })
         } else if (sub === "current") {
+            embed.setColor(bot.colors.true as ColorResolvable)
             embed.setDescription(`<:1422navoteicon:1271775782426902598> <@${user.id}> Votre pseudonyme actuel est: ${user.username}.`)
 
             return void await interaction.editReply({embeds: [embed]});
         }
     }
 }
+
