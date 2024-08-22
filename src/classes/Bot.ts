@@ -43,7 +43,7 @@ import path from "path";
 
 import emojis from "../utils/jsons/emojis.json";
 import colors from "../utils/jsons/colors.json";
-import { customColorsType, customEmojisType } from "../enums/Types";
+import { customColorsType } from "../enums/Types";
 import { ClientCustomEvents, CommandDatas, CommandDatasOption, EventDatas, MongooseEvents } from "../enums/Interfaces";
 import Database from "./Database";
 import { EventType, LangValues } from "../enums/enums";
@@ -52,7 +52,6 @@ import EventEmitter from "node:events";
 export default class Bot extends EventEmitter {
     public djsClient: Client | undefined;
     public database: Database | undefined;
-    public customEmojis: customEmojisType = emojis;
     public colors: customColorsType = colors;
     public commands: Collection<string, CommandDatas> = new Collection();
     public eventTypes: { 1: string; 2: string; 3: string };
