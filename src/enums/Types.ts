@@ -13,23 +13,6 @@ import {
     Snowflake
 } from 'discord.js';
 
-export type customEmojisType = {
-    chat: string;
-    community: string;
-    id: string;
-    channel: string;
-    admin: string;
-    mod: string;
-    automod: string;
-    stats: string;
-    support: string;
-    user: string;
-    ben: string;
-    leftarrow: string;
-    rightarrow: string;
-    leave: string;
-    join: string;
-};
 
 export type customColorsType = {
     true: string;
