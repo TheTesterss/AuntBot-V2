@@ -46,7 +46,7 @@ export const command: CommandDatas = {
         isNSFW: false,
         whitelistDisallowed: false,
         memberRequiredPermissions: [],
-        clientrequiredPermissions: []
+        clientRequiredPermissions: []
     },
     types: [ApplicationCommandType.ChatInput],
     execute: async (
@@ -69,23 +69,22 @@ export const command: CommandDatas = {
         let user_db = await database.models.UserDB.findOne({id: user.id});
         if(!user_db) {
             await database.models.UserDB.create({id: user.id, prevnames: [{date: Date.now(), content: user.username}], blacklist: {isBlacklisted: false}, whitelist: {isWhitelisted: false}}).catch((_e: any) => {})
-            embed.setDescription(`This user is not includes on the database.`)
-
+            embed.setDescription(`<:9692redguard:1274033795615424582> This user is not includes on the database.`)
+            .setColor(bot.colors.false as ColorResolvable)
             return void interaction.editReply({embeds: [embed]})
         }
         if(sub === "reset") {
-            user_db = await database.models.UserDB.findOne({id: interaction.user.id})
-            if(!user_db) {
+            try {
+                await database.models.UserDB.findOneAndUpdate({id: interaction.user.id}, { $set: { prevnames: [{date: Date.now(), content: interaction.user.username }]}})
+                embed.setDescription(`<:1422navoteicon:1271775782426902598> <@${interaction.user.id}> Your old usernames got reseted.`)
+                .setColor(bot.colors.true as ColorResolvable)
+                return void await interaction.editReply({embeds: [embed]});
+            } catch(e) {
                 await database.models.UserDB.create({id: user.id, prevnames: [{date: Date.now(), content: user.username}], blacklist: {isBlacklisted: false}, whitelist: {isWhitelisted: false}}).catch((_e: any) => {})
-                embed.setDescription(`This user is not includes on the database.`)
+                embed.setDescription(`<:9692redguard:1274033795615424582> This user is not includes on the database.`)
+                .setColor(bot.colors.false as ColorResolvable)
 
                 return void interaction.editReply({embeds: [embed]})
-            } else {
-                user_db?.updateOne({prevnames: [{date: Date.now(), content: user.username}]})
-                user_db?.save()
-                embed.setDescription(`<:1422navoteicon:1271775782426902598> <@${interaction.user.id}> Your old usernames got reseted.`)
-
-                return void await interaction.editReply({embeds: [embed]});
             }
         } else if(sub === "view") {
             let s = 0, e = 9;
@@ -108,7 +107,7 @@ export const command: CommandDatas = {
                     )
             }
 
-            embed.setDescription(`<:1422navoteicon:1271775782426902598> List of <@${user.id}>'s usernames. ${list?.length} entries.`)
+            embed.setDescription(`<:1422navoteicon:1271775782426902598> List of <@${user.id}>'s usernames. ${list?.length} entries.`).setColor(bot.colors.true as ColorResolvable)
             embed.addFields(
                 {
                     name: `<t:${Math.round(Date.now() / 1000)}:R>`,
@@ -116,7 +115,7 @@ export const command: CommandDatas = {
                         const date = value.date as number;
                         const content = value.content as string;
                         return `<:1814nafaceawesomeicon:1271775791981789325> <t:${Math.round(date / 1000)}:R> - \`${content}\``;
-                    }).slice(s, e).join("\n")}`,
+                    }).slice(s, e).join("\n")}.`,
                     inline: true
                 }
             );
@@ -161,7 +160,7 @@ export const command: CommandDatas = {
                                     const date = value.date as number;
                                     const content = value.content as string;
                                     return `<:1814nafaceawesomeicon:1271775791981789325> <t:${Math.round(date / 1000)}:R> - \`${content}\``;
-                                }).slice(s, e).join("\n")}`,
+                                }).slice(s, e).join("\n")}.`,
                                 inline: true
                             }
                         )
@@ -169,7 +168,7 @@ export const command: CommandDatas = {
                 })
             })
         } else if (sub === "current") {
-            embed.setDescription(`<:1422navoteicon:1271775782426902598> <@${user.id}> You're current username is: ${user.username}.`)
+            embed.setDescription(`<:1422navoteicon:1271775782426902598> <@${user.id}> You're current username is: ${user.username}.`).setColor(bot.colors.true as ColorResolvable)
 
             return void await interaction.editReply({embeds: [embed]});
         }
