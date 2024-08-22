@@ -83,10 +83,11 @@ export const command: CommandDatas = {
             } else {
                 user_db?.updateOne({prevnames: [{date: Date.now(), content: user.username}]})
                 user_db?.save();
-            }
-            embed.setDescription(`<:1422navoteicon:1271775782426902598> <@${interaction.user.id}> Vos anciens pseudonymes ont été réinitialisé.`)
+            
+                embed.setDescription(`<:1422navoteicon:1271775782426902598> <@${interaction.user.id}> Vos anciens pseudonymes ont été réinitialisé.`)
 
-            return void await interaction.editReply({embeds: [embed]});
+                return void await interaction.editReply({embeds: [embed]});
+            }
         } else if(sub === "view") {
             let s = 0, e = 9;
             let list = user_db?.prevnames;
@@ -108,7 +109,7 @@ export const command: CommandDatas = {
                     )
             }
 
-            embed.setDescription(`<:1422navoteicon:1271775782426902598> liste des pseudonymes de <${user.id}>. ${list?.length} entrées.`)
+            embed.setDescription(`<:1422navoteicon:1271775782426902598> liste des pseudonymes de <@${user.id}>. ${list?.length} entrées.`)
             embed.addFields(
                 {
                     name: `<t:${Math.round(Date.now() / 1000)}:R>`,
@@ -153,7 +154,7 @@ export const command: CommandDatas = {
                             iconURL: interaction.client.user.avatarURL() ?? undefined,
                             text: 'Alimenté par Aunt Développement'
                         })
-                        .setDescription(`<:1422navoteicon:1271775782426902598> Liste des pseudonymes de <${user.id}>. ${list?.length} entrées.`)
+                        .setDescription(`<:1422navoteicon:1271775782426902598> Liste des pseudonymes de <@${user.id}>. ${list?.length} entrées.`)
                         .addFields(
                             {
                                 name: `<t:${Math.round(Date.now() / 1000)}:R>`,
