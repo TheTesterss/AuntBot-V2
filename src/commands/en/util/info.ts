@@ -694,7 +694,7 @@ export const command: CommandDatas = {
             if (member.voice.channel) {
                 embed.addFields({
                     name: `Voice stats`,
-                    value: `<:7506namodcommunityicon:1271775882595536926> **Where:** ${member.voice.channel}\n<:7645nabumbicon:1271775891432800298> **Muted?** ${member.voice.mute ? `<:icons_online:1271775659160506378>` : `<:icons_dred:1271775677472968746>`}\n<:7761nasparcleicon:1271775902216228915> **Deafen?** ${member.voice.deaf ? `<:icons_online:1271775659160506378>` : `<:icons_dred:1271775677472968746>`}\n<:8395memberdarkgreen:1274036793817301043> **Video&?** ${member.voice.selfVideo ? `<:icons_online:1271775659160506378>` : `<:icons_dred:1271775677472968746>`}\n<:9659nachessicon:1271775948852957276> **Streaming?** ${member.voice.streaming ? `<:icons_online:1271775659160506378>` : `<:icons_dred:1271775677472968746>`}`,
+                    value: `<:7506namodcommunityicon:1271775882595536926> **Where:** ${member.voice.channel}\n<:7645nabumbicon:1271775891432800298> **Muted?** ${member.voice.mute ? `<:icons_online:1271775659160506378>` : `<:icons_dred:1271775677472968746>`}\n<:7761nasparcleicon:1271775902216228915> **Deafen?** ${member.voice.deaf ? `<:icons_online:1271775659160506378>` : `<:icons_dred:1271775677472968746>`}\n<:8395memberdarkgreen:1274036793817301043> **Video?** ${member.voice.selfVideo ? `<:icons_online:1271775659160506378>` : `<:icons_dred:1271775677472968746>`}\n<:9659nachessicon:1271775948852957276> **Streaming?** ${member.voice.streaming ? `<:icons_online:1271775659160506378>` : `<:icons_dred:1271775677472968746>`}`,
                     inline: false
                 });
             }
@@ -702,7 +702,7 @@ export const command: CommandDatas = {
             if (member.presence?.activities[0]) {
                 embed.addFields({
                     name: `Current activities`,
-                    value: `<:1814nafaceawesomeicon:1271775791981789325> **Name:** \`${member.presence?.activities[member.presence.activities.length - 1]?.name ?? 'No current one'}\`\n<:2835verifiedbadgered:1274033477334863872> **State:** ${member.presence?.activities[0]?.emoji ?? ''} \`${member.presence?.activities[0]?.state ?? 'No custom state'}\`\n<:3192nacakeicon:1271775822990151772> **Since:** <t:${Math.round(member.presence?.activities[member.presence.activities.length - 1]?.createdTimestamp ?? 0 / 1000)}:R>\n<:3036bluemodmailbadge:1274033322581819492> **Details:** \`${member.presence?.activities[member.presence.activities.length - 1]?.details ?? 'no details found'}\``,
+                    value: `<:1814nafaceawesomeicon:1271775791981789325> **Name:** \`${member.presence?.activities[member.presence.activities.length - 1]?.name ?? 'No current one'}\`\n<:2835verifiedbadgered:1274033477334863872> **State:** ${member.presence?.activities[0]?.emoji ?? ''} \`${member.presence?.activities[0]?.state ?? 'No custom state'}\`\n<:3192nacakeicon:1271775822990151772> **Since:** <t:${Math.round((member.presence?.activities[member.presence.activities.length - 1]?.createdTimestamp ?? 0) / 1000)}:R>\n<:3036bluemodmailbadge:1274033322581819492> **Details:** \`${member.presence?.activities[member.presence.activities.length - 1]?.details ?? 'no details found'}\``,
                     inline: false
                 });
             }
