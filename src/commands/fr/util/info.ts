@@ -700,7 +700,7 @@ export const command: CommandDatas = {
             if (member.presence?.activities[0]) {
                 embed.addFields({
                     name: `Activités en cours`,
-                    value: `<:1814nafaceawesomeicon:1271775791981789325> **Nom:** \`${member.presence?.activities[member.presence.activities.length- 1]?.name ?? 'Aucune activité valide trouvée'}\`\n<:2835verifiedbadgered:1274033477334863872> **Etat:** ${member.presence?.activities[0]?.emoji ?? ''} \`${member.presence?.activities[0]?.state ?? 'Aucun statut ajouté'}\`\n<:3192nacakeicon:1271775822990151772> **Depuis:** <t:${Math.round(member.presence?.activities[member.presence.activities.length- 1]?.createdTimestamp ?? 0 / 1000)}:R>\n<:3036bluemodmailbadge:1274033322581819492> **Détails:** \`${member.presence?.activities[member.presence.activities.length- 1]?.details ?? 'Aucun détail donné'}\``,
+                    value: `<:1814nafaceawesomeicon:1271775791981789325> **Nom:** \`${member.presence?.activities[member.presence.activities.length- 1]?.name ?? 'Aucune activité valide trouvée'}\`\n<:2835verifiedbadgered:1274033477334863872> **Etat:** ${member.presence?.activities[0]?.emoji ?? ''} \`${member.presence?.activities[0]?.state ?? 'Aucun statut ajouté'}\`\n<:3192nacakeicon:1271775822990151772> **Depuis:** <t:${Math.round((member.presence?.activities[member.presence.activities.length- 1]?.createdTimestamp ?? 0) / 1000)}:R>\n<:3036bluemodmailbadge:1274033322581819492> **Détails:** \`${member.presence?.activities[member.presence.activities.length- 1]?.details ?? 'Aucun détail donné'}\``,
                     inline: false
                 });
             }
