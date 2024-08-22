@@ -6,20 +6,20 @@ import {
     EmbedBuilder,
     MessageContextMenuCommandInteraction,
     UserContextMenuCommandInteraction
-} from "discord.js";
-import { CommandDatas } from "../../../enums/Interfaces";
-import Bot from "../../../classes/Bot";
-import Database from "../../../classes/Database";
-import { LangValues } from "../../../enums/enums";
+} from 'discord.js';
+import { CommandDatas } from '../../../enums/Interfaces';
+import Bot from '../../../classes/Bot';
+import Database from '../../../classes/Database';
+import { LangValues } from '../../../enums/enums';
 
 export const command: CommandDatas = {
-    name: "latencies",
+    name: 'latencies',
     nameLocalizations: {
-        fr: "latences"
+        fr: 'latences'
     },
-    description: "Show the differents client latencies.",
+    description: 'Show the differents client latencies.',
     descriptionLocalizations: {
-        fr: "Affiche les différentes latences du client."
+        fr: 'Affiche les différentes latences du client.'
     },
     options: [],
     customOptions: {
@@ -48,17 +48,17 @@ export const command: CommandDatas = {
     ): Promise<void> => {
         let embed = new EmbedBuilder().setColor(bot.colors.true as ColorResolvable).setFooter({
             iconURL: interaction.client.user.avatarURL() ?? undefined,
-            text: "Powered by Aunt Development"
+            text: 'Powered by Aunt Development'
         });
 
         let message = await interaction.editReply({
-            embeds: [embed.setDescription(`${bot.customEmojis.chat} - Fetching latencies...`)]
+            embeds: [embed.setDescription(`<:1422navoteicon:1271775782426902598> - Looking for latencies...`)]
         });
         await message.edit({
             embeds: [
-                embed.setDescription(`${bot.customEmojis.chat} - Latencies fetched.`).addFields({
+                embed.setDescription(`<:1422navoteicon:1271775782426902598> - Found latencies.`).addFields({
                     name: `<t:${Math.round(Date.now() / 1000)}:R>`,
-                    value: `${bot.customEmojis.stats} - **Gateway MS** - \`${bot.djsClient!.ws.ping}ms\`\n${bot.customEmojis.stats} - **Response MS** - \`${Math.round(message.createdTimestamp / interaction.createdTimestamp)}ms\`\n${bot.customEmojis.stats} - **Connected** - <t:${Math.round(bot.djsClient!.readyTimestamp! / 1000)}:R>`,
+                    value: `<:8614naboosticon:1271775921166221312> - **Gateway MS** - \`${bot.djsClient!.ws.ping}ms\`\n<:6123nacompassicon:1271775852434034688> - **Response MS** - \`${Math.round(message.createdTimestamp / interaction.createdTimestamp)}ms\`\n<:7506namodcommunityicon:1271775882595536926> - **Connexion** - <t:${Math.round(bot.djsClient!.readyTimestamp! / 1000)}:R>`,
                     inline: true
                 })
             ]
