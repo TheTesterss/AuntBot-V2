@@ -4,7 +4,6 @@ import {
     ChatInputCommandInteraction,
     ColorResolvable,
     EmbedBuilder,
-    GuildMember,
     MessageContextMenuCommandInteraction,
     UserContextMenuCommandInteraction
 } from "discord.js";
@@ -82,11 +81,10 @@ export const command: CommandDatas = {
                 iconURL: interaction.client.user.avatarURL() ?? undefined,
                 text: newLang === "fr" ? "Alimenté par Aunt Développement" : "Powered by Aunt Development"
             })
-            .setTitle(newLang === "fr" ? "Succès !" : "Success!")
             .setDescription(
                 newLang === "fr"
-                    ? "Je parlerai désormais français 🇫🇷 sur ce serveur !"
-                    : "From now on, I'll be speaking English 🇺🇸 on this server!"
+                    ? "<:1422navoteicon:1271775782426902598> Je parlerai désormais français 🇫🇷 sur ce serveur !"
+                    : "<:1422navoteicon:1271775782426902598> From now on, I'll be speaking English 🇺🇸 on this server!"
             );
 
         await interaction.editReply({ embeds: [embed] });
